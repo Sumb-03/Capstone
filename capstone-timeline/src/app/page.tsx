@@ -63,6 +63,12 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-hidden">
+      {/* Cisco logo - only on map views */}
+      {currentView !== 'main' && (
+        <div className="fixed top-4 right-4 z-[200] pointer-events-none">
+          <img src="/images/cisco-logo.png" alt="Cisco" className="w-20 sm:w-24 opacity-70" />
+        </div>
+      )}
       <AnimatePresence mode="wait">
         {currentView === 'europe' && (
           <motion.div

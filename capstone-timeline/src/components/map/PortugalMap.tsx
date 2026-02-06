@@ -70,9 +70,15 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
     const vb = svgEl.viewBox?.baseVal;
     if (!vb || (vb.width === 100 && vb.height === 100)) return false;
 
+    // Reset margins before measuring so we get consistent values
+    mapWrapperRef.current.style.marginLeft = '0px';
+    mapWrapperRef.current.style.marginTop = '0px';
+
     const svgRect = svgEl.getBoundingClientRect();
+    if (svgRect.width === 0 || svgRect.height === 0) return false;
     const scaleX = svgRect.width / vb.width;
     const scaleY = svgRect.height / vb.height;
+    if (!isFinite(scaleX) || !isFinite(scaleY) || scaleX === 0 || scaleY === 0) return false;
 
     // Hide island paths and find mainland bounding box
     const paths = svgEl.querySelectorAll('path');
@@ -169,13 +175,47 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (computePositions()) clearInterval(timer);
-    }, 200);
-    const cleanup = setTimeout(() => clearInterval(timer), 10000);
+    let intervalId: ReturnType<typeof setInterval>;
+    let attempts = 0;
+    const maxAttempts = 100;
+    let done = false;
+
+    const tryCompute = () => {
+      if (done) return;
+      attempts++;
+      if (computePositions()) {
+        done = true;
+        clearInterval(intervalId);
+        observer?.disconnect();
+      } else if (attempts >= maxAttempts) {
+        clearInterval(intervalId);
+      }
+    };
+
+    // Delay initial measurement to let the parent framer-motion
+    // scale animation (0.3 → 1) complete — getBoundingClientRect()
+    // returns wrong values while the parent is mid-transform.
+    const startDelay = setTimeout(() => {
+      intervalId = setInterval(tryCompute, 200);
+    }, 900);
+
+    // Also observe DOM changes in case the SVG renders late
+    let observer: MutationObserver | null = null;
+    if (mapWrapperRef.current) {
+      let debounceTimer: ReturnType<typeof setTimeout>;
+      observer = new MutationObserver(() => {
+        if (done) return;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(tryCompute, 100);
+      });
+      observer.observe(mapWrapperRef.current, { childList: true, subtree: true });
+    }
+
     return () => {
-      clearInterval(timer);
-      clearTimeout(cleanup);
+      done = true;
+      clearTimeout(startDelay);
+      clearInterval(intervalId);
+      observer?.disconnect();
     };
   }, [computePositions, mapSize]);
 
@@ -229,14 +269,14 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
 
         {/* Map - clipped to mainland only, centered below title */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: ready ? 1 : 0, scale: ready ? 1 : 0.95 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: ready ? 1 : 0 }}
           transition={{ duration: 0.8 }}
           ref={clipRef}
           className="relative mx-auto"
           style={{
             ...clipStyle,
-            filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.4))',
+            filter: ready ? 'drop-shadow(0 10px 30px rgba(0,0,0,0.4))' : undefined,
           }}
         >
           <div ref={mapWrapperRef} className="portugal-map-wrapper relative">
