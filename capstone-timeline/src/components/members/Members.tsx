@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
-import { TeamMember } from '@/data/membersData';
+import { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import {
   MapPin,
   Mail,
@@ -14,13 +14,48 @@ import {
   X,
 } from 'lucide-react';
 
-interface MembersProps {
-  members: TeamMember[];
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  city: string;
+  bio: string;
+  avatar?: string;
+  skills: string[];
+  linkedin?: string;
+  github?: string;
+  email?: string;
 }
 
-export default function Members({ members }: MembersProps) {
+export default function Members() {
+  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [imageError, setImageError] = useState<Record<string, boolean>>({});
+
+  // Fetch team members from API
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/team');
+        if (!response.ok) {
+          throw new Error('Failed to fetch team members');
+        }
+        const data = await response.json();
+        setMembers(data.members || []);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching team members:', err);
+        setError('Failed to load team members');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -57,22 +92,57 @@ export default function Members({ members }: MembersProps) {
   return (
     <div className="w-full min-h-[calc(100vh-200px)] px-3 sm:px-4 py-4 sm:py-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-6 sm:mb-8 md:mb-12"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-4">
-            Meet Our Team
-          </h2>
-          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4">
-            Talented individuals from across Portugal, working together to build amazing things.
-          </p>
-        </motion.div>
+        {/* Loading state */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-purple-500 mb-4" />
+            <p className="text-gray-500 dark:text-gray-400">Loading team members...</p>
+          </div>
+        )}
 
-        {/* Team stats */}
+        {/* Error state */}
+        {error && !loading && (
+          <div className="text-center py-20">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!loading && !error && members.length === 0 && (
+          <div className="text-center py-20">
+            <User className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+            <p className="text-gray-500 dark:text-gray-400 mb-2">No team members yet</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">
+              Add team members by creating folders in /public/team/
+            </p>
+          </div>
+        )}
+
+        {/* Main content - only show when loaded and has members */}
+        {!loading && !error && members.length > 0 && (
+          <>
+            {/* Header */}
+            <motion.div
+              className="text-center mb-6 sm:mb-8 md:mb-12"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-4">
+                Meet Our Team
+              </h2>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4">
+                Talented individuals from across Portugal, working together to build amazing things.
+              </p>
+            </motion.div>
+
+            {/* Team stats */}
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8 md:mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -221,6 +291,8 @@ export default function Members({ members }: MembersProps) {
             </motion.div>
           </div>
         ))}
+          </>
+        )}
       </div>
 
       {/* Member detail modal */}

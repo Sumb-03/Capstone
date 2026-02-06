@@ -9,7 +9,6 @@ import PortugalMap from '@/components/map/PortugalMap';
 import Members from '@/components/members/Members';
 import Albums from '@/components/albums/Albums';
 import { timelineData } from '@/data/timelineData';
-import { teamMembers } from '@/data/membersData';
 import { ArrowLeft, Clock, Users, Image as ImageIcon } from 'lucide-react';
 
 type ViewState = 'europe' | 'portugal' | 'main';
@@ -188,7 +187,7 @@ export default function Home() {
                   exit={{ opacity: 0, x: 50 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Members members={teamMembers} />
+                  <Members />
                 </motion.div>
               )}
               
