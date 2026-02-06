@@ -1,0 +1,12 @@
+{
+  "name": "John Doe",
+  "role": "Software Engineer",
+  "university": "University of Lisbon",
+  "course": "Computer Science",
+  "linkedin": "https://linkedin.com/in/johndoe",
+  "github": "https://github.com/johndoe",
+  "email": "john.doe@cisco.com",
+  "bio": "Passionate about building scalable web applications and exploring new technologies.",
+  "skills": ["React", "TypeScript", "Node.js", "Python"],
+  "funFact": "I can solve a Rubik's cube in under 2 minutes!"
+}
