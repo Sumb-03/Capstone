@@ -19,15 +19,42 @@ export const teamLocations: TeamLocation[] = [
     city: 'Porto',
     x: 0,  // Not used - coordinates come from CITY_COORDINATES
     y: 0,
-    memberCount: 7,
+    memberCount: 4,
     memberNames: [
-      'Ricardo Simoes',
       'Diogo Campos',
       'Francisco Inacio',
       'Hugo Dias',
-      'Joao Estevao',
-      'Jorge Grabovschi',
       'Paris Krystallis'
+    ],
+  },
+  {
+    id: 2,
+    city: 'Aveiro',
+    x: 0,
+    y: 0,
+    memberCount: 1,
+    memberNames: [
+      'Ricardo Simoes'
+    ],
+  },
+  {
+    id: 3,
+    city: 'Leiria',
+    x: 0,
+    y: 0,
+    memberCount: 1,
+    memberNames: [
+      'Jorge Grabovschi'
+    ],
+  },
+  {
+    id: 4,
+    city: 'Lisboa',
+    x: 0,
+    y: 0,
+    memberCount: 1,
+    memberNames: [
+      'Joao Estevao'
     ],
   },
 ];
