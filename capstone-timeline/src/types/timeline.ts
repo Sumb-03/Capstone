@@ -4,6 +4,8 @@ export interface TimelineEvent {
   date: string;
   description: string;
   image?: string;
+  images?: string[];  // Multiple images for carousel
+  imageFolder?: string;  // Folder name in public/images/timeline/
   icon?: string;
   color?: string;
   category?: string;

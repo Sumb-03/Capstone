@@ -1,0 +1,8 @@
+{
+  "title": "Milestone Title Here",
+  "date": "Month Year",
+  "description": "Description of this milestone (1-3 sentences)",
+  "icon": "rocket",
+  "color": "bg-blue-500",
+  "category": "Category Name"
+}

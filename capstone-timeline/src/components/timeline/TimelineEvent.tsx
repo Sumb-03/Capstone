@@ -1,7 +1,7 @@
 ﻿'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
 import { TimelineEvent as TimelineEventType } from '@/types/timeline';
 import Image from 'next/image';
 import {
@@ -13,6 +13,9 @@ import {
   Presentation,
   Calendar,
   Tag,
+  ChevronLeft,
+  ChevronRight,
+  Circle,
 } from 'lucide-react';
 
 interface TimelineEventProps {
@@ -33,9 +36,65 @@ const iconMap: Record<string, any> = {
 export default function TimelineEvent({ event, index, isLeft }: TimelineEventProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState<Record<number, boolean>>({});
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [images, setImages] = useState<string[]>([]);
+  const [isHovering, setIsHovering] = useState(false);
 
   const Icon = event.icon ? iconMap[event.icon] || Rocket : Rocket;
+
+  // Fetch images from folder if imageFolder is specified
+  useEffect(() => {
+    const loadImages = async () => {
+      if (event.imageFolder) {
+        try {
+          const response = await fetch(`/api/timeline-images?folder=${encodeURIComponent(event.imageFolder)}`);
+          const data = await response.json();
+          if (data.images && data.images.length > 0) {
+            setImages(data.images);
+          } else if (event.images && event.images.length > 0) {
+            setImages(event.images);
+          } else if (event.image) {
+            setImages([event.image]);
+          }
+        } catch (error) {
+          console.error('Error loading images:', error);
+          if (event.images && event.images.length > 0) {
+            setImages(event.images);
+          } else if (event.image) {
+            setImages([event.image]);
+          }
+        }
+      } else if (event.images && event.images.length > 0) {
+        setImages(event.images);
+      } else if (event.image) {
+        setImages([event.image]);
+      }
+    };
+
+    loadImages();
+  }, [event.imageFolder, event.images, event.image]);
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }
+  };
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    }
+  };
+
+  const handleImageError = (idx: number) => {
+    setImageError(prev => ({ ...prev, [idx]: true }));
+  };
+
+  const currentImage = images[currentImageIndex];
+  const hasMultipleImages = images.length > 1;
 
   const cardVariants = {
     hidden: {
@@ -73,79 +132,126 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
   };
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative mb-8">
       {/* Timeline node - desktop */}
       <motion.div
-        className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-white shadow-lg z-10 hidden md:flex items-center justify-center"
+        className="absolute left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-white shadow-lg z-10 hidden md:flex items-center justify-center"
         variants={iconVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
       >
-        <div className={`w-10 h-10 rounded-full ${event.color} flex items-center justify-center`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`w-12 h-12 rounded-full ${event.color} flex items-center justify-center shadow-inner`}>
+          <Icon className="w-7 h-7 text-white" />
         </div>
       </motion.div>
 
-      {/* Event card */}
+      {/* Event card - PPT style, larger */}
       <motion.div
-        className={`md:w-[calc(50%-3rem)] ${
-          isLeft ? 'md:mr-auto md:pr-16' : 'md:ml-auto md:pl-16'
+        className={`md:w-[calc(50%-4rem)] ${
+          isLeft ? 'md:mr-auto md:pr-20' : 'md:ml-auto md:pl-20'
         } w-full`}
         variants={cardVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
       >
         <motion.div
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 relative"
+          className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] transition-all duration-500 relative"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
           whileHover={{ 
-            y: -8,
+            y: -12,
             scale: 1.02,
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
           style={{ 
             perspective: '1000px',
             transformStyle: 'preserve-3d',
           }}
         >
-          {/* Animated border gradient */}
-          <motion.div
-            className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-            style={{
-              background: `linear-gradient(135deg, transparent 0%, transparent 50%, transparent 100%)`,
-              backgroundSize: '200% 200%',
-            }}
-            animate={{
-              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-          />
-
-          {/* Image */}
-          {event.image && !imageError && (
-            <motion.div 
-              className="relative h-64 w-full overflow-hidden"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.4 }}
+          {/* Image carousel - larger, 16:9 aspect ratio for PPT feel */}
+          {images.length > 0 && currentImage && !imageError[currentImageIndex] && (
+            <div 
+              className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-700"
+              style={{ aspectRatio: '16/9' }}
             >
-              <Image
-                src={event.image}
-                alt={event.title}
-                fill
-                className="object-cover"
-                onError={() => setImageError(true)}
-              />
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
-                initial={{ opacity: 0.5 }}
-                whileHover={{ opacity: 0.7 }}
-                transition={{ duration: 0.3 }}
-              />
-              
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentImageIndex}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={currentImage}
+                    alt={`${event.title} - Image ${currentImageIndex + 1}`}
+                    fill
+                    className="object-cover"
+                    onError={() => handleImageError(currentImageIndex)}
+                    priority={index < 2}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+              {/* Navigation arrows - only show if multiple images */}
+              {hasMultipleImages && (
+                <>
+                  <motion.button
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg flex items-center justify-center text-gray-800 dark:text-white hover:bg-white hover:scale-110 transition-all z-10"
+                    onClick={handlePrevImage}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: isHovering ? 1 : 0.6, x: 0 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </motion.button>
+                  <motion.button
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg flex items-center justify-center text-gray-800 dark:text-white hover:bg-white hover:scale-110 transition-all z-10"
+                    onClick={handleNextImage}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: isHovering ? 1 : 0.6, x: 0 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </motion.button>
+                </>
+              )}
+
+              {/* Image counter & dots */}
+              {hasMultipleImages && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+                  <div className="flex items-center gap-2">
+                    {images.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentImageIndex(idx);
+                        }}
+                        className="group"
+                      >
+                        <Circle
+                          className={`w-3 h-3 transition-all ${
+                            idx === currentImageIndex
+                              ? 'fill-white text-white scale-125'
+                              : 'fill-white/40 text-white/40 hover:fill-white/70 hover:text-white/70'
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                  <span className="text-xs text-white/80 font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
+                    {currentImageIndex + 1} / {images.length}
+                  </span>
+                </div>
+              )}
+
               {/* Category badge on image */}
               {event.category && (
                 <motion.div 
@@ -154,39 +260,39 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.15 + 0.5 }}
                 >
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-sm text-gray-800">
-                    <Tag className="w-3 h-3" />
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold bg-white/95 backdrop-blur-sm text-gray-800 shadow-md">
+                    <Tag className="w-4 h-4" />
                     {event.category}
                   </span>
                 </motion.div>
               )}
-            </motion.div>
+            </div>
           )}
 
-          {/* Content */}
-          <div className="p-6">
+          {/* Content - larger padding for PPT feel */}
+          <div className="p-8 md:p-10">
             {/* Mobile icon */}
-            <div className="md:hidden flex items-center gap-3 mb-4">
-              <div className={`w-10 h-10 rounded-full ${event.color} flex items-center justify-center`}>
-                <Icon className="w-5 h-5 text-white" />
+            <div className="md:hidden flex items-center gap-3 mb-5">
+              <div className={`w-12 h-12 rounded-full ${event.color} flex items-center justify-center shadow-md`}>
+                <Icon className="w-6 h-6 text-white" />
               </div>
               {event.category && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-                  <Tag className="w-3 h-3" />
+                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                  <Tag className="w-4 h-4" />
                   {event.category}
                 </span>
               )}
             </div>
 
-            {/* Date */}
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
-              <Calendar className="w-4 h-4" />
-              <span className="font-medium">{event.date}</span>
+            {/* Date - larger */}
+            <div className="flex items-center gap-2 text-base text-gray-500 dark:text-gray-400 mb-4">
+              <Calendar className="w-5 h-5" />
+              <span className="font-semibold tracking-wide">{event.date}</span>
             </div>
 
-            {/* Title */}
+            {/* Title - much larger for presentation feel */}
             <motion.h3 
-              className="text-2xl font-bold text-gray-900 dark:text-white mb-3"
+              className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.15 + 0.6 }}
@@ -194,9 +300,9 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
               {event.title}
             </motion.h3>
 
-            {/* Description */}
+            {/* Description - larger text for readability */}
             <motion.p 
-              className="text-gray-600 dark:text-gray-300 leading-relaxed"
+              className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.15 + 0.7 }}
@@ -205,9 +311,9 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
             </motion.p>
           </div>
 
-          {/* Decorative bottom border with animation */}
+          {/* Decorative bottom border with animation - thicker */}
           <motion.div 
-            className={`h-1 ${event.color}`}
+            className={`h-2 ${event.color}`}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: index * 0.15 + 0.8, duration: 0.6 }}
@@ -217,10 +323,10 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
 
         {/* Connector line to center - desktop only */}
         <div
-          className={`hidden md:block absolute top-6 w-16 h-0.5 bg-gradient-to-r ${
+          className={`hidden md:block absolute top-7 w-20 h-1 bg-gradient-to-r rounded-full ${
             isLeft
-              ? 'right-0 from-transparent to-gray-300'
-              : 'left-0 from-gray-300 to-transparent'
+              ? 'right-0 from-transparent to-gray-300 dark:to-gray-600'
+              : 'left-0 from-gray-300 dark:from-gray-600 to-transparent'
           }`}
         />
       </motion.div>

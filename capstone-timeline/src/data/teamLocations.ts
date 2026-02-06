@@ -1,74 +1,41 @@
 // Team member locations across Portugal
-// Coordinates are percentages (0-100) relative to the visible mainland map
-// x: 0 = left edge of mainland, 100 = right edge
-// y: 0 = top (north), 100 = bottom (south)
+// The city name is used to look up coordinates from CITY_COORDINATES in PortugalMap
+// Supported cities: Porto, Braga, Viana do Castelo, Vila Real, Bragança, Guarda,
+// Viseu, Aveiro, Coimbra, Castelo Branco, Leiria, Santarém, Portalegre,
+// Lisbon/Lisboa, Setúbal, Évora, Beja, Faro
 
 export interface TeamLocation {
   id: number;
-  city: string;
-  x: number; // Percentage position (0-100)
-  y: number; // Percentage position (0-100)
+  city: string;  // Must match a key in CITY_COORDINATES
+  x: number;     // Not used anymore - kept for backwards compatibility
+  y: number;     // Not used anymore - kept for backwards compatibility
   memberCount: number;
-  memberNames?: string[]; // Optional: Add specific team member names
+  memberNames?: string[];
 }
 
 export const teamLocations: TeamLocation[] = [
   {
     id: 1,
     city: 'Porto',
-    x: 35,
-    y: 12,
-    memberCount: 3,
-    memberNames: ['Team Member 1', 'Team Member 2', 'Team Member 3'],
+    x: 0,  // Not used - coordinates come from CITY_COORDINATES
+    y: 0,
+    memberCount: 7,
+    memberNames: [
+      'Ricardo Simoes',
+      'Diogo Campos',
+      'Francisco Inacio',
+      'Hugo Dias',
+      'Joao Estevao',
+      'Jorge Grabovschi',
+      'Paris Krystallis'
+    ],
   },
-  {
-    id: 2,
-    city: 'Coimbra',
-    x: 45,
-    y: 22,
-    memberCount: 2,
-    memberNames: ['Team Member 4', 'Team Member 5'],
-  },
-  {
-    id: 3,
-    city: 'Braga',
-    x: 32,
-    y: 7,
-    memberCount: 1,
-    memberNames: ['Team Member 6'],
-  },
-  {
-    id: 4,
-    city: 'Faro',
-    x: 55,
-    y: 90,
-    memberCount: 2,
-    memberNames: ['Team Member 7', 'Team Member 8'],
-  },
-  {
-    id: 5,
-    city: 'Évora',
-    x: 58,
-    y: 68,
-    memberCount: 1,
-    memberNames: ['Team Member 9'],
-  },
-  // Add more locations as needed:
-  // {
-  //   id: 6,
-  //   city: 'Aveiro',
-  //   x: 38,
-  //   y: 18,
-  //   memberCount: 2,
-  //   memberNames: ['Team Member 10', 'Team Member 11'],
-  // },
 ];
 
-// Cisco office location in Lisbon
-// Coordinates are percentages (0-100) relative to the visible mainland map
+// Cisco office location - uses city name for coordinates
 export const ciscoLocation = {
   city: 'Lisbon',
   address: 'Cisco Office Lisbon',
-  x: 35,
-  y: 55,
+  x: 0,  // Not used
+  y: 0,
 };

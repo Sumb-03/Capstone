@@ -16,7 +16,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Keyboard,
+  Maximize2,
 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface TimelineProps {
   events: TimelineEventType[];
@@ -36,6 +41,7 @@ export default function Timeline({ events }: TimelineProps) {
   const [direction, setDirection] = useState(0);
   const [imageError, setImageError] = useState<Record<string, boolean>>({});
   const [showKeyboardHint, setShowKeyboardHint] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<TimelineEventType | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const goToNext = useCallback(() => {
@@ -60,6 +66,8 @@ export default function Timeline({ events }: TimelineProps) {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedEvent) return; // Don't navigate when dialog is open
+      
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
         goToNext();
@@ -72,12 +80,15 @@ export default function Timeline({ events }: TimelineProps) {
       } else if (e.key === 'End') {
         e.preventDefault();
         goToIndex(events.length - 1);
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setSelectedEvent(events[currentIndex]);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNext, goToPrev, goToIndex, events.length]);
+  }, [goToNext, goToPrev, goToIndex, events, currentIndex, selectedEvent]);
 
   // Hide keyboard hint after 5 seconds
   useEffect(() => {
@@ -156,7 +167,7 @@ export default function Timeline({ events }: TimelineProps) {
             className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg text-xs sm:text-sm text-gray-600 dark:text-gray-300 z-20"
           >
             <Keyboard className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">Use arrow keys to navigate</span>
+            <span className="hidden sm:inline">Use arrow keys to navigate • Enter to expand</span>
             <span className="sm:hidden">← → navigate</span>
           </motion.div>
         )}
@@ -245,33 +256,31 @@ export default function Timeline({ events }: TimelineProps) {
       {/* Main content area */}
       <div className="relative w-full max-w-5xl h-[400px] sm:h-[450px] md:h-[500px] flex items-center justify-center">
         {/* Navigation buttons */}
-        <motion.button
+        <Button
           onClick={goToPrev}
           disabled={currentIndex === 0}
-          className={`absolute left-1 sm:left-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentIndex === 0
-              ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-white shadow-xl hover:shadow-2xl hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
-          whileHover={currentIndex !== 0 ? { scale: 1.1, x: -5 } : {}}
-          whileTap={currentIndex !== 0 ? { scale: 0.95 } : {}}
+          variant="outline"
+          size="icon"
+          className={cn(
+            "absolute left-1 sm:left-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full",
+            currentIndex === 0 && "opacity-50 cursor-not-allowed"
+          )}
         >
           <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
-        </motion.button>
+        </Button>
 
-        <motion.button
+        <Button
           onClick={goToNext}
           disabled={currentIndex === events.length - 1}
-          className={`absolute right-1 sm:right-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 ${
-            currentIndex === events.length - 1
-              ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-white shadow-xl hover:shadow-2xl hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
-          whileHover={currentIndex !== events.length - 1 ? { scale: 1.1, x: 5 } : {}}
-          whileTap={currentIndex !== events.length - 1 ? { scale: 0.95 } : {}}
+          variant="outline"
+          size="icon"
+          className={cn(
+            "absolute right-1 sm:right-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full",
+            currentIndex === events.length - 1 && "opacity-50 cursor-not-allowed"
+          )}
         >
           <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
-        </motion.button>
+        </Button>
 
         {/* Event card carousel */}
         <div className="w-full max-w-3xl h-full overflow-hidden px-12 sm:px-16">
@@ -301,10 +310,10 @@ export default function Timeline({ events }: TimelineProps) {
               }}
               className="w-full h-full cursor-grab active:cursor-grabbing"
             >
-              {/* Event card */}
-              <motion.div
-                className="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden h-full flex flex-col md:flex-row"
-                whileHover={{ y: -5 }}
+              {/* Event card - clickable to expand */}
+              <Card 
+                className="overflow-hidden h-full flex flex-col md:flex-row cursor-pointer group hover:shadow-2xl transition-all duration-300 border-0 shadow-xl bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl"
+                onClick={() => setSelectedEvent(currentEvent)}
               >
                 {/* Image side */}
                 {currentEvent.image && !imageError[currentEvent.id] && (
@@ -313,7 +322,7 @@ export default function Timeline({ events }: TimelineProps) {
                       src={currentEvent.image}
                       alt={currentEvent.title}
                       fill
-                      className="object-cover"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={() => setImageError(prev => ({ ...prev, [currentEvent.id]: true }))}
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white/20 dark:to-gray-800/20" />
@@ -332,14 +341,30 @@ export default function Timeline({ events }: TimelineProps) {
                         </span>
                       </motion.div>
                     )}
+
+                    {/* Expand indicator */}
+                    <motion.div
+                      className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    >
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-black/70 text-white backdrop-blur-sm">
+                        <Maximize2 className="w-3 h-3" />
+                        Click to expand
+                      </span>
+                    </motion.div>
                   </div>
                 )}
 
                 {/* Content side */}
-                <div className={`flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-center ${!currentEvent.image || imageError[currentEvent.id] ? 'items-center text-center' : ''}`}>
+                <CardContent className={cn(
+                  "flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-center",
+                  (!currentEvent.image || imageError[currentEvent.id]) && 'items-center text-center'
+                )}>
                   {/* Icon */}
                   <motion.div
-                    className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl ${currentEvent.color} flex items-center justify-center mb-3 sm:mb-4 md:mb-6 shadow-lg`}
+                    className={cn(
+                      "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 md:mb-6 shadow-lg",
+                      currentEvent.color
+                    )}
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.2 }}
@@ -368,9 +393,9 @@ export default function Timeline({ events }: TimelineProps) {
                     {currentEvent.title}
                   </motion.h2>
 
-                  {/* Description */}
+                  {/* Description (truncated) */}
                   <motion.p
-                    className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-3 sm:mb-4 md:mb-6 line-clamp-3 sm:line-clamp-none"
+                    className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-3 sm:mb-4 md:mb-6 line-clamp-2 sm:line-clamp-3"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -378,23 +403,18 @@ export default function Timeline({ events }: TimelineProps) {
                     {currentEvent.description}
                   </motion.p>
 
-                  {/* Navigation hint - hidden on small screens */}
+                  {/* Click to expand hint */}
                   <motion.div
-                    className="hidden sm:flex items-center gap-4 text-xs sm:text-sm text-gray-400 dark:text-gray-500"
+                    className="flex items-center gap-2 text-xs sm:text-sm text-purple-500 dark:text-purple-400 font-medium"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.6 }}
                   >
-                    <span className="flex items-center gap-1">
-                      <kbd className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">←</kbd>
-                      <kbd className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">→</kbd>
-                      Navigate
-                    </span>
-                    <span className="text-gray-300 dark:text-gray-600">|</span>
-                    <span>Swipe or drag</span>
+                    <Maximize2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>Click card for full details</span>
                   </motion.div>
-                </div>
-              </motion.div>
+                </CardContent>
+              </Card>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -406,16 +426,140 @@ export default function Timeline({ events }: TimelineProps) {
           <motion.button
             key={index}
             onClick={() => goToIndex(index)}
-            className={`h-2 sm:h-3 rounded-full transition-all duration-300 ${
+            className={cn(
+              "h-2 sm:h-3 rounded-full transition-all duration-300",
               index === currentIndex
                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 w-6 sm:w-8'
                 : 'bg-gray-300 dark:bg-gray-600 w-2 sm:w-3'
-            }`}
+            )}
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
           />
         ))}
       </div>
+
+      {/* Expanded Event Dialog */}
+      <Dialog open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+          {selectedEvent && (
+            <>
+              {/* Dialog Image */}
+              {selectedEvent.image && !imageError[selectedEvent.id] && (
+                <div className="relative w-full h-48 sm:h-64 md:h-80">
+                  <Image
+                    src={selectedEvent.image}
+                    alt={selectedEvent.title}
+                    fill
+                    className="object-cover"
+                    onError={() => setImageError(prev => ({ ...prev, [selectedEvent.id]: true }))}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  
+                  {/* Category badge on image */}
+                  {selectedEvent.category && (
+                    <div className="absolute top-4 left-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-white/95 backdrop-blur-sm text-gray-800 shadow-lg">
+                        <Tag className="w-4 h-4" />
+                        {selectedEvent.category}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Title overlay on image */}
+                  <div className="absolute bottom-4 left-6 right-6">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
+                      {selectedEvent.title}
+                    </h2>
+                  </div>
+                </div>
+              )}
+
+              {/* Dialog Content */}
+              <div className="p-6 sm:p-8">
+                {/* If no image, show title here */}
+                {(!selectedEvent.image || imageError[selectedEvent.id]) && (
+                  <DialogHeader className="mb-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      {(() => {
+                        const SelectedIcon = selectedEvent.icon ? iconMap[selectedEvent.icon] || Rocket : Rocket;
+                        return (
+                          <div className={cn(
+                            "w-14 h-14 rounded-xl flex items-center justify-center shadow-lg",
+                            selectedEvent.color
+                          )}>
+                            <SelectedIcon className="w-7 h-7 text-white" />
+                          </div>
+                        );
+                      })()}
+                      {selectedEvent.category && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                          <Tag className="w-4 h-4" />
+                          {selectedEvent.category}
+                        </span>
+                      )}
+                    </div>
+                    <DialogTitle className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                      {selectedEvent.title}
+                    </DialogTitle>
+                  </DialogHeader>
+                )}
+
+                {/* Date and Icon row (when image exists) */}
+                {selectedEvent.image && !imageError[selectedEvent.id] && (
+                  <div className="flex items-center gap-4 mb-6">
+                    {(() => {
+                      const SelectedIcon = selectedEvent.icon ? iconMap[selectedEvent.icon] || Rocket : Rocket;
+                      return (
+                        <div className={cn(
+                          "w-12 h-12 rounded-xl flex items-center justify-center shadow-lg",
+                          selectedEvent.color
+                        )}>
+                          <SelectedIcon className="w-6 h-6 text-white" />
+                        </div>
+                      );
+                    })()}
+                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                      <Calendar className="w-5 h-5" />
+                      <span className="font-medium text-lg">{selectedEvent.date}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Date (when no image) */}
+                {(!selectedEvent.image || imageError[selectedEvent.id]) && (
+                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-6">
+                    <Calendar className="w-5 h-5" />
+                    <span className="font-medium text-lg">{selectedEvent.date}</span>
+                  </div>
+                )}
+
+                {/* Full Description */}
+                <div className="prose prose-lg dark:prose-invert max-w-none">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
+                    {selectedEvent.description}
+                  </p>
+                </div>
+
+                {/* Additional details section */}
+                <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Calendar className="w-4 h-4" />
+                      {selectedEvent.date}
+                    </Button>
+                    {selectedEvent.category && (
+                      <Button variant="secondary" size="sm" className="gap-2">
+                        <Tag className="w-4 h-4" />
+                        {selectedEvent.category}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

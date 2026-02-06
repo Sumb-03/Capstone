@@ -33,7 +33,9 @@ Each event requires:
 | `title` | string | ✅ Yes | Event title |
 | `date` | string | ✅ Yes | Display date (e.g., "January 2026") |
 | `description` | string | ✅ Yes | Event description |
-| `image` | string | ❌ No | Image URL or path |
+| `image` | string | ❌ No | Single image URL (fallback) |
+| `images` | string[] | ❌ No | Array of image URLs |
+| `imageFolder` | string | ❌ No | Folder name in `public/images/timeline/` |
 | `icon` | string | ❌ No | Icon name (see below) |
 | `color` | string | ❌ No | Tailwind color class |
 | `category` | string | ❌ No | Category label |
@@ -64,7 +66,7 @@ Each event requires:
 
 ## 3️⃣ Add Images
 
-### Option A: Local Images
+### Option A: Local Images (Single)
 
 1. Save image to `public/images/`
 2. Reference as: `/images/my-photo.jpg`
@@ -73,7 +75,65 @@ Each event requires:
 image: '/images/project-kickoff.jpg'
 ```
 
-### Option B: External URLs
+### Option B: Multiple Images (Carousel)
+
+The timeline cards support image carousels! You can add multiple images in two ways:
+
+#### Using Image Folders (Recommended)
+
+1. Create a folder in `public/images/timeline/` with your event name:
+   ```
+   public/images/timeline/project-inception/
+   ```
+
+2. Add images with numbers in the filename for ordering:
+   ```
+   public/images/timeline/project-inception/
+     1_kickoff-meeting.jpg
+     2_team-brainstorm.jpg
+     3_whiteboard-session.png
+     photo_4.jpg
+   ```
+   
+3. Reference the folder name in your event:
+   ```typescript
+   {
+     id: '1',
+     title: 'Project Inception',
+     imageFolder: 'project-inception',  // Folder name
+     image: '/fallback-image.jpg',       // Fallback if folder empty
+     // ... other fields
+   }
+   ```
+
+#### Using Images Array
+
+Directly specify multiple image URLs:
+
+```typescript
+{
+  id: '1',
+  title: 'Project Inception',
+  images: [
+    '/images/photo1.jpg',
+    '/images/photo2.jpg',
+    'https://example.com/photo3.jpg'
+  ],
+  // ... other fields
+}
+```
+
+#### Pre-created Folders
+
+The following folders are ready for you to add images:
+- `public/images/timeline/project-inception/`
+- `public/images/timeline/research-phase/`
+- `public/images/timeline/design-prototyping/`
+- `public/images/timeline/development-sprint/`
+- `public/images/timeline/testing-refinement/`
+- `public/images/timeline/final-presentation/`
+
+### Option C: External URLs
 
 1. Add domain to `next.config.js`:
 ```javascript

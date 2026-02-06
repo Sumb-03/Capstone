@@ -10,14 +10,19 @@
     "export": "next build && next export"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-slot": "^1.2.4",
     "@react-map/europe": "^1.0.9",
     "@react-map/portugal": "^1.0.9",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.3",
     "lucide-react": "^0.316.0",
     "next": "^14.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.0.0",

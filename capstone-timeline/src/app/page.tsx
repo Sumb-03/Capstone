@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Timeline from '@/components/timeline/Timeline';
 import Header from '@/components/ui/Header';
@@ -9,6 +9,7 @@ import PortugalMap from '@/components/map/PortugalMap';
 import Members from '@/components/members/Members';
 import Albums from '@/components/albums/Albums';
 import { timelineData } from '@/data/timelineData';
+import { TimelineEvent } from '@/types/timeline';
 import { ArrowLeft, Clock, Users, Image as ImageIcon } from 'lucide-react';
 
 type ViewState = 'europe' | 'portugal' | 'main';
@@ -17,6 +18,26 @@ type TabState = 'timeline' | 'members' | 'albums';
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewState>('europe');
   const [currentTab, setCurrentTab] = useState<TabState>('timeline');
+  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(timelineData.events);
+
+  // Fetch timeline events from API
+  useEffect(() => {
+    async function fetchTimeline() {
+      try {
+        const response = await fetch('/api/timeline');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.events && data.events.length > 0) {
+            setTimelineEvents(data.events);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch timeline:', error);
+        // Keep using static data as fallback
+      }
+    }
+    fetchTimeline();
+  }, []);
 
   const handlePortugalClick = () => {
     setCurrentView('portugal');
@@ -175,7 +196,7 @@ export default function Home() {
                   exit={{ opacity: 0, x: 50 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Timeline events={timelineData.events} />
+                  <Timeline events={timelineEvents} />
                 </motion.div>
               )}
               
