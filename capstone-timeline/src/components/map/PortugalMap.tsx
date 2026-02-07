@@ -508,21 +508,23 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
 
         {/* Cisco Office Preview - rendered outside clip container so it's not clipped */}
         <AnimatePresence>
-          {showOfficePreview && ciscoMarkerRef.current && (() => {
-            const rect = ciscoMarkerRef.current!.getBoundingClientRect();
+          {showOfficePreview && markerPos && clipRef.current && (() => {
+            // Calculate pin screen position from clip container + markerPos - clipOffset
+            const clipRect = clipRef.current!.getBoundingClientRect();
+            const pinScreenX = clipRect.left + (markerPos.x - clipOffset.left);
+            const pinScreenY = clipRect.top + (markerPos.y - clipOffset.top);
             return (
               <motion.div
-                className="fixed z-[100]"
+                className="fixed z-[100] flex items-center"
                 onMouseEnter={() => setShowOfficePreview(true)}
                 onMouseLeave={() => setShowOfficePreview(false)}
                 style={{
-                  left: rect.left - 12,
-                  top: rect.top + rect.height / 2,
-                  transform: 'translate(-100%, -50%)',
+                  left: pinScreenX - 20,
+                  top: pinScreenY,
                 }}
-                initial={{ opacity: 0, x: 10, scale: 0.9 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: 10, scale: 0.9 }}
+                initial={{ opacity: 0, x: 'calc(-100% + 20px)', y: '-50%', scale: 0.9 }}
+                animate={{ opacity: 1, x: '-100%', y: '-50%', scale: 1 }}
+                exit={{ opacity: 0, x: 'calc(-100% + 20px)', y: '-50%', scale: 0.9 }}
                 transition={{ duration: 0.2 }}
               >
                 <div className="bg-slate-800/95 backdrop-blur-md rounded-xl border border-white/20 shadow-2xl overflow-hidden w-64 sm:w-80">
@@ -545,9 +547,9 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
                     </p>
                   </div>
                 </div>
-                {/* Arrow pointing down */}
-                <div className="flex justify-center">
-                  <div className="w-3 h-3 bg-slate-800/95 border-r border-b border-white/20 transform rotate-45 -mt-1.5" />
+                {/* Arrow pointing right toward the marker */}
+                <div className="flex-shrink-0 -ml-[1px]">
+                  <div className="w-3 h-3 bg-slate-800/95 border-r border-b border-white/20 transform -rotate-45" />
                 </div>
               </motion.div>
             );
