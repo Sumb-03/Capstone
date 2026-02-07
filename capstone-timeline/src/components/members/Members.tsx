@@ -95,8 +95,8 @@ export default function Members() {
         {/* Loading state */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-purple-500 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400">Loading team members...</p>
+            <Loader2 className="w-8 h-8 animate-spin text-blue-400 mb-4" />
+            <p className="text-blue-200/60">Loading team members...</p>
           </div>
         )}
 
@@ -106,7 +106,7 @@ export default function Members() {
             <p className="text-red-500 mb-4">{error}</p>
             <button 
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               Try Again
             </button>
@@ -116,9 +116,9 @@ export default function Members() {
         {/* Empty state */}
         {!loading && !error && members.length === 0 && (
           <div className="text-center py-20">
-            <User className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 mb-2">No team members yet</p>
-            <p className="text-sm text-gray-400 dark:text-gray-500">
+            <User className="w-16 h-16 mx-auto text-blue-300/30 mb-4" />
+            <p className="text-blue-200/60 mb-2">No team members yet</p>
+            <p className="text-sm text-blue-200/40">
               Add team members by creating folders in /public/team/
             </p>
           </div>
@@ -134,10 +134,10 @@ export default function Members() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 sm:mb-4">
                 Meet Our Team
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4">
+              <p className="text-sm sm:text-base text-blue-200/60 max-w-2xl mx-auto px-4">
                 Talented individuals from across Portugal, working together to build amazing things.
               </p>
             </motion.div>
@@ -149,57 +149,40 @@ export default function Members() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
               {members.length}
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Team Members</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Team Members</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
               {Object.keys(groupedByCity).length}
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Cities</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Cities</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-orange-500">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
               {new Set(members.flatMap(m => m.skills)).size}
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Skills</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Skills</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-red-500">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
               100%
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Dedication</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Dedication</div>
           </div>
         </motion.div>
 
-        {/* Members grid by city */}
-        {Object.entries(groupedByCity).map(([city, cityMembers], cityIndex) => (
-          <div key={city} className="mb-6 sm:mb-8 md:mb-12">
-            <motion.div
-              className="flex items-center gap-2 mb-4 sm:mb-6"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: cityIndex * 0.1 }}
-            >
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500" />
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200">
-                {city}
-              </h3>
-              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                ({cityMembers.length} member{cityMembers.length > 1 ? 's' : ''})
-              </span>
-            </motion.div>
-
+        {/* Members grid - all together */}
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
-              {cityMembers.map((member) => (
+              {members.map((member) => (
                 <motion.div
                   key={member.id}
                   variants={cardVariants}
@@ -208,9 +191,9 @@ export default function Members() {
                   onClick={() => setSelectedMember(member)}
                   className="cursor-pointer"
                 >
-                  <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300">
+                  <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border border-white/10 hover:shadow-2xl hover:border-white/20 transition-all duration-300">
                     {/* Avatar */}
-                    <div className="relative h-40 sm:h-48 bg-gradient-to-br from-purple-500 to-pink-500">
+                    <div className="relative h-40 sm:h-48 bg-gradient-to-br from-blue-500 to-emerald-500">
                       {member.avatar && !imageError[member.id] ? (
                         <Image
                           src={member.avatar}
@@ -238,12 +221,18 @@ export default function Members() {
 
                     {/* Content */}
                     <div className="p-3 sm:p-4">
+                      {/* City */}
+                      <div className="flex items-center gap-1 text-blue-300/70 text-xs mb-2">
+                        <MapPin className="w-3 h-3" />
+                        {member.city}
+                      </div>
+
                       {/* Skills */}
                       <div className="flex flex-wrap gap-2 mb-3">
                         {member.skills.slice(0, 3).map((skill) => (
                           <span
                             key={skill}
-                            className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300"
+                            className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/20"
                           >
                             {skill}
                           </span>
@@ -258,7 +247,7 @@ export default function Members() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            className="p-2 rounded-full bg-white/10 text-blue-300 hover:bg-blue-500/30 hover:text-blue-200 transition-colors"
                           >
                             <Linkedin className="w-4 h-4" />
                           </a>
@@ -269,7 +258,7 @@ export default function Members() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                            className="p-2 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition-colors"
                           >
                             <Github className="w-4 h-4" />
                           </a>
@@ -278,7 +267,7 @@ export default function Members() {
                           <a
                             href={`mailto:${member.email}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-purple-100 dark:hover:bg-purple-900/30 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                            className="p-2 rounded-full bg-white/10 text-emerald-300 hover:bg-emerald-500/30 hover:text-emerald-200 transition-colors"
                           >
                             <Mail className="w-4 h-4" />
                           </a>
@@ -289,8 +278,6 @@ export default function Members() {
                 </motion.div>
               ))}
             </motion.div>
-          </div>
-        ))}
           </>
         )}
       </div>
@@ -305,7 +292,7 @@ export default function Members() {
           onClick={() => setSelectedMember(null)}
         >
           <motion.div
-            className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden"
+            className="bg-slate-800/60 backdrop-blur-md rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-white/10"
             initial={{ scale: 0.9, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 50 }}
@@ -314,13 +301,13 @@ export default function Members() {
             {/* Close button */}
             <button
               onClick={() => setSelectedMember(null)}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 transition-colors"
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Avatar */}
-            <div className="relative h-64 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500">
+            <div className="relative h-64 bg-gradient-to-br from-blue-500 via-emerald-500 to-cyan-500">
               {selectedMember.avatar && !imageError[selectedMember.id] ? (
                 <Image
                   src={selectedMember.avatar}
@@ -338,32 +325,32 @@ export default function Members() {
 
             {/* Content */}
             <div className="p-6 -mt-16 relative">
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+              <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/10">
+                <h3 className="text-2xl font-bold text-white mb-1">
                   {selectedMember.name}
                 </h3>
-                <p className="text-purple-600 dark:text-purple-400 font-medium mb-2">
+                <p className="text-emerald-400 font-medium mb-2">
                   {selectedMember.role}
                 </p>
-                <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm mb-4">
+                <div className="flex items-center gap-1 text-blue-300/70 text-sm mb-4">
                   <MapPin className="w-4 h-4" />
                   {selectedMember.city}
                 </div>
 
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                <p className="text-blue-100/70 mb-6">
                   {selectedMember.bio}
                 </p>
 
                 {/* Skills */}
                 <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <h4 className="text-sm font-semibold text-blue-200/80 mb-2">
                     Skills
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedMember.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-3 py-1 text-sm font-medium rounded-full bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 text-purple-700 dark:text-purple-300"
+                        className="px-3 py-1 text-sm font-medium rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/20"
                       >
                         {skill}
                       </span>
@@ -389,7 +376,7 @@ export default function Members() {
                       href={selectedMember.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-800 dark:bg-gray-700 text-white hover:bg-gray-900 dark:hover:bg-gray-600 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors border border-white/10"
                     >
                       <Github className="w-4 h-4" />
                       GitHub
@@ -398,7 +385,7 @@ export default function Members() {
                   {selectedMember.email && (
                     <a
                       href={`mailto:${selectedMember.email}`}
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
                     >
                       <Mail className="w-4 h-4" />
                       Email

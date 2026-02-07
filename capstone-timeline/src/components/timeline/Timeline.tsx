@@ -138,7 +138,7 @@ export default function Timeline({ events }: TimelineProps) {
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl"
           animate={{
             x: [0, 50, 0],
             y: [0, -30, 0],
@@ -147,7 +147,7 @@ export default function Timeline({ events }: TimelineProps) {
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-40 sm:w-80 h-40 sm:h-80 bg-gradient-to-r from-pink-500/10 to-orange-500/10 rounded-full blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-40 sm:w-80 h-40 sm:h-80 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 rounded-full blur-3xl"
           animate={{
             x: [0, -40, 0],
             y: [0, 40, 0],
@@ -164,7 +164,7 @@ export default function Timeline({ events }: TimelineProps) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg text-xs sm:text-sm text-gray-600 dark:text-gray-300 z-20"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-white/10 backdrop-blur-md rounded-full shadow-lg text-xs sm:text-sm text-blue-200 z-20 border border-white/10"
           >
             <Keyboard className="w-3 h-3 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Use arrow keys to navigate • Enter to expand</span>
@@ -176,16 +176,16 @@ export default function Timeline({ events }: TimelineProps) {
       {/* Progress bar */}
       <div className="w-full max-w-4xl mb-4 sm:mb-8 relative z-10 px-2 sm:px-0">
         <div className="flex items-center justify-between mb-1 sm:mb-2">
-          <span className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">
+          <span className="text-xs sm:text-sm font-medium text-blue-300">
             {currentIndex + 1} / {events.length}
           </span>
-          <span className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">
+          <span className="text-xs sm:text-sm font-medium text-blue-300">
             {Math.round(((currentIndex + 1) / events.length) * 100)}% Complete
           </span>
         </div>
-        <div className="h-1.5 sm:h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full"
+            className="h-full bg-gradient-to-r from-blue-500 via-emerald-400 to-blue-400 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${((currentIndex + 1) / events.length) * 100}%` }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -197,9 +197,9 @@ export default function Timeline({ events }: TimelineProps) {
       <div className="w-full max-w-4xl mb-4 sm:mb-8 relative z-10 hidden sm:block">
         <div className="relative h-16 flex items-center">
           {/* Track line */}
-          <div className="absolute left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700 rounded-full" />
+          <div className="absolute left-0 right-0 h-1 bg-white/10 rounded-full" />
           <motion.div
-            className="absolute left-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full"
+            className="absolute left-0 h-1 bg-gradient-to-r from-blue-500 via-emerald-400 to-blue-400 rounded-full"
             animate={{ width: `${(currentIndex / (events.length - 1)) * 100}%` }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
           />
@@ -223,23 +223,23 @@ export default function Timeline({ events }: TimelineProps) {
                   <motion.div
                     className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                       isActive
-                        ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/30'
+                        ? 'bg-gradient-to-br from-blue-500 via-emerald-400 to-blue-400 shadow-lg shadow-blue-500/30'
                         : isPast
-                        ? 'bg-gradient-to-br from-blue-400 to-purple-400'
-                        : 'bg-gray-300 dark:bg-gray-600'
+                        ? 'bg-gradient-to-br from-blue-400 to-emerald-400'
+                        : 'bg-white/10 border border-white/20'
                     }`}
                     animate={isActive ? { scale: [1, 1.1, 1] } : {}}
                     transition={{ duration: 1.5, repeat: isActive ? Infinity : 0 }}
                   >
-                    <DotIcon className={`w-5 h-5 ${isActive || isPast ? 'text-white' : 'text-gray-500 dark:text-gray-400'}`} />
+                    <DotIcon className={`w-5 h-5 ${isActive || isPast ? 'text-white' : 'text-blue-200/50'}`} />
                   </motion.div>
                   
                   {/* Label */}
                   <motion.span
                     className={`absolute -bottom-6 text-xs font-medium whitespace-nowrap transition-all duration-300 ${
                       isActive
-                        ? 'text-purple-600 dark:text-purple-400'
-                        : 'text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300'
+                        ? 'text-emerald-400'
+                        : 'text-blue-300/40 group-hover:text-blue-200'
                     }`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isActive ? 1 : 0.7 }}
@@ -262,7 +262,7 @@ export default function Timeline({ events }: TimelineProps) {
           variant="outline"
           size="icon"
           className={cn(
-            "absolute left-1 sm:left-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full",
+            "absolute left-1 sm:left-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white",
             currentIndex === 0 && "opacity-50 cursor-not-allowed"
           )}
         >
@@ -275,7 +275,7 @@ export default function Timeline({ events }: TimelineProps) {
           variant="outline"
           size="icon"
           className={cn(
-            "absolute right-1 sm:right-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full",
+            "absolute right-1 sm:right-0 z-20 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white",
             currentIndex === events.length - 1 && "opacity-50 cursor-not-allowed"
           )}
         >
@@ -312,7 +312,7 @@ export default function Timeline({ events }: TimelineProps) {
             >
               {/* Event card - clickable to expand */}
               <Card 
-                className="overflow-hidden h-full flex flex-col md:flex-row cursor-pointer group hover:shadow-2xl transition-all duration-300 border-0 shadow-xl bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl"
+                className="overflow-hidden h-full flex flex-col md:flex-row cursor-pointer group hover:shadow-2xl transition-all duration-300 border-0 shadow-xl bg-slate-800/80 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/10"
                 onClick={() => setSelectedEvent(currentEvent)}
               >
                 {/* Image side */}
@@ -325,7 +325,7 @@ export default function Timeline({ events }: TimelineProps) {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={() => setImageError(prev => ({ ...prev, [currentEvent.id]: true }))}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white/20 dark:to-gray-800/20" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-slate-800/30" />
                     
                     {/* Category badge */}
                     {currentEvent.category && (
@@ -335,7 +335,7 @@ export default function Timeline({ events }: TimelineProps) {
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
                       >
-                        <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-white/95 backdrop-blur-sm text-gray-800 shadow-lg">
+                        <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-black/50 backdrop-blur-sm text-white shadow-lg border border-white/10">
                           <Tag className="w-3 h-3 sm:w-4 sm:h-4" />
                           {currentEvent.category}
                         </span>
@@ -374,7 +374,7 @@ export default function Timeline({ events }: TimelineProps) {
 
                   {/* Date */}
                   <motion.div
-                    className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-2 sm:mb-3"
+                    className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-blue-300 mb-2 sm:mb-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -385,7 +385,7 @@ export default function Timeline({ events }: TimelineProps) {
 
                   {/* Title */}
                   <motion.h2
-                    className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-4"
+                    className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
@@ -395,7 +395,7 @@ export default function Timeline({ events }: TimelineProps) {
 
                   {/* Description (truncated) */}
                   <motion.p
-                    className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-3 sm:mb-4 md:mb-6 line-clamp-2 sm:line-clamp-3"
+                    className="text-sm sm:text-base md:text-lg text-blue-100/70 leading-relaxed mb-3 sm:mb-4 md:mb-6 line-clamp-2 sm:line-clamp-3"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -405,7 +405,7 @@ export default function Timeline({ events }: TimelineProps) {
 
                   {/* Click to expand hint */}
                   <motion.div
-                    className="flex items-center gap-2 text-xs sm:text-sm text-purple-500 dark:text-purple-400 font-medium"
+                    className="flex items-center gap-2 text-xs sm:text-sm text-emerald-400 font-medium"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.6 }}
@@ -429,8 +429,8 @@ export default function Timeline({ events }: TimelineProps) {
             className={cn(
               "h-2 sm:h-3 rounded-full transition-all duration-300",
               index === currentIndex
-                ? 'bg-gradient-to-r from-blue-500 to-purple-500 w-6 sm:w-8'
-                : 'bg-gray-300 dark:bg-gray-600 w-2 sm:w-3'
+                ? 'bg-gradient-to-r from-blue-500 to-emerald-400 w-6 sm:w-8'
+                : 'bg-white/20 w-2 sm:w-3'
             )}
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
@@ -440,7 +440,7 @@ export default function Timeline({ events }: TimelineProps) {
 
       {/* Expanded Event Dialog */}
       <Dialog open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-slate-900 border-white/10 text-white">
           {selectedEvent && (
             <>
               {/* Dialog Image */}
@@ -458,7 +458,7 @@ export default function Timeline({ events }: TimelineProps) {
                   {/* Category badge on image */}
                   {selectedEvent.category && (
                     <div className="absolute top-4 left-4">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-white/95 backdrop-blur-sm text-gray-800 shadow-lg">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-white/10 text-blue-200 border border-white/10">
                         <Tag className="w-4 h-4" />
                         {selectedEvent.category}
                       </span>
@@ -492,13 +492,13 @@ export default function Timeline({ events }: TimelineProps) {
                         );
                       })()}
                       {selectedEvent.category && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold bg-white/10 text-blue-200 border border-white/10">
                           <Tag className="w-4 h-4" />
                           {selectedEvent.category}
                         </span>
                       )}
                     </div>
-                    <DialogTitle className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                    <DialogTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
                       {selectedEvent.title}
                     </DialogTitle>
                   </DialogHeader>
@@ -518,7 +518,7 @@ export default function Timeline({ events }: TimelineProps) {
                         </div>
                       );
                     })()}
-                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-blue-300">
                       <Calendar className="w-5 h-5" />
                       <span className="font-medium text-lg">{selectedEvent.date}</span>
                     </div>
@@ -527,28 +527,28 @@ export default function Timeline({ events }: TimelineProps) {
 
                 {/* Date (when no image) */}
                 {(!selectedEvent.image || imageError[selectedEvent.id]) && (
-                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-6">
+                  <div className="flex items-center gap-2 text-blue-300 mb-6">
                     <Calendar className="w-5 h-5" />
                     <span className="font-medium text-lg">{selectedEvent.date}</span>
                   </div>
                 )}
 
                 {/* Full Description */}
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
+                <div className="prose prose-lg prose-invert max-w-none">
+                  <p className="text-blue-100/80 leading-relaxed text-base sm:text-lg">
                     {selectedEvent.description}
                   </p>
                 </div>
 
                 {/* Additional details section */}
-                <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="mt-8 pt-6 border-t border-white/10">
                   <div className="flex flex-wrap gap-3">
-                    <Button variant="outline" size="sm" className="gap-2">
+                    <Button variant="outline" size="sm" className="gap-2 bg-white/10 border-white/20 text-blue-200 hover:bg-white/20 hover:text-white">
                       <Calendar className="w-4 h-4" />
                       {selectedEvent.date}
                     </Button>
                     {selectedEvent.category && (
-                      <Button variant="secondary" size="sm" className="gap-2">
+                      <Button variant="secondary" size="sm" className="gap-2 bg-white/10 border-white/20 text-blue-200 hover:bg-white/20 hover:text-white">
                         <Tag className="w-4 h-4" />
                         {selectedEvent.category}
                       </Button>

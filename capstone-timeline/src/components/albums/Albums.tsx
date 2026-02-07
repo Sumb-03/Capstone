@@ -134,8 +134,8 @@ export default function Albums() {
         {/* Loading State */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
-            <p className="text-gray-600 dark:text-gray-400">Loading albums...</p>
+            <Loader2 className="w-12 h-12 text-blue-400 animate-spin mb-4" />
+            <p className="text-blue-200/60">Loading albums...</p>
           </div>
         )}
 
@@ -143,18 +143,18 @@ export default function Albums() {
         {error && !loading && (
           <div className="flex flex-col items-center justify-center py-20">
             <FolderOpen className="w-16 h-16 text-red-400 mb-4" />
-            <p className="text-red-500 mb-2">Error loading albums</p>
-            <p className="text-gray-500 text-sm">{error}</p>
+            <p className="text-red-400 mb-2">Error loading albums</p>
+            <p className="text-blue-200/60 text-sm">{error}</p>
           </div>
         )}
 
         {/* Empty State */}
         {!loading && !error && albums.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20">
-            <FolderOpen className="w-16 h-16 text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No Albums Found</h3>
-            <p className="text-gray-500 dark:text-gray-400 text-center max-w-md">
-              Add folders with images to <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">/public/albums/</code> to create albums.
+            <FolderOpen className="w-16 h-16 text-blue-300/40 mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">No Albums Found</h3>
+            <p className="text-blue-200/60 text-center max-w-md">
+              Add folders with images to <code className="bg-white/10 px-2 py-1 rounded">/public/albums/</code> to create albums.
             </p>
           </div>
         )}
@@ -169,10 +169,10 @@ export default function Albums() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 sm:mb-4">
             Photo Gallery
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-4 sm:mb-6 px-4">
+          <p className="text-sm sm:text-base text-blue-200/60 max-w-2xl mx-auto mb-4 sm:mb-6 px-4">
             Capture the moments that define our journey together.
           </p>
 
@@ -182,8 +182,8 @@ export default function Albums() {
               onClick={() => { setViewMode('albums'); setSelectedAlbum(null); }}
               className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all duration-300 text-sm sm:text-base ${
                 viewMode === 'albums'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-blue-500 to-emerald-500 text-white shadow-lg shadow-blue-500/25'
+                  : 'bg-white/10 text-white/60 hover:bg-white/20'
               }`}
             >
               <FolderOpen className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -193,8 +193,8 @@ export default function Albums() {
               onClick={() => { setViewMode('all'); setSelectedAlbum(null); }}
               className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all duration-300 text-sm sm:text-base ${
                 viewMode === 'all'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-blue-500 to-emerald-500 text-white shadow-lg shadow-blue-500/25'
+                  : 'bg-white/10 text-white/60 hover:bg-white/20'
               }`}
             >
               <Grid className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -210,32 +210,32 @@ export default function Albums() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg border border-white/10">
             <div className="flex items-center justify-center mb-1 sm:mb-2">
-              <FolderOpen className="w-5 h-5 sm:w-6 sm:h-6 text-purple-500" />
+              <FolderOpen className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-xl sm:text-2xl font-bold text-white">
               {albums.length}
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Albums</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Albums</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg border border-white/10">
             <div className="flex items-center justify-center mb-1 sm:mb-2">
-              <ImageIcon className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500" />
+              <ImageIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-xl sm:text-2xl font-bold text-white">
               {allPhotos.length}
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Photos</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Photos</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg border border-gray-100 dark:border-gray-700 col-span-2 md:col-span-1">
+          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center shadow-lg border border-white/10 col-span-2 md:col-span-1">
             <div className="flex items-center justify-center mb-1 sm:mb-2">
-              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" />
+              <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-xl sm:text-2xl font-bold text-white">
               6 Months
             </div>
-            <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Of Memories</div>
+            <div className="text-xs sm:text-sm text-blue-200/60">Of Memories</div>
           </div>
         </motion.div>
 
@@ -256,7 +256,7 @@ export default function Albums() {
                 onClick={() => setSelectedAlbum(album)}
                 className="cursor-pointer group"
               >
-                <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300">
+                <div className="bg-slate-800/60 backdrop-blur-md rounded-3xl shadow-lg overflow-hidden border border-white/10 hover:shadow-2xl hover:border-white/20 transition-all duration-300">
                   {/* Cover image */}
                   <div className="relative h-64 overflow-hidden">
                     {!imageError[album.id] ? (
@@ -268,7 +268,7 @@ export default function Albums() {
                         onError={() => setImageError(prev => ({ ...prev, [album.id]: true }))}
                       />
                     ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center">
                         <ImageIcon className="w-16 h-16 text-white/50" />
                       </div>
                     )}
@@ -276,7 +276,7 @@ export default function Albums() {
                     
                     {/* Photo count badge */}
                     <div className="absolute top-4 right-4">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-white/90 backdrop-blur-sm text-gray-800 shadow-lg">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-black/50 backdrop-blur-sm text-white border border-white/20 shadow-lg">
                         <ImageIcon className="w-4 h-4" />
                         {album.photos.length} photos
                       </span>
@@ -310,7 +310,7 @@ export default function Albums() {
                               onError={() => setImageError(prev => ({ ...prev, [photo.id]: true }))}
                             />
                           ) : (
-                            <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700" />
+                            <div className="absolute inset-0 bg-slate-700" />
                           )}
                           {idx === 3 && album.photos.length > 4 && (
                             <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
@@ -340,16 +340,16 @@ export default function Albums() {
             >
               <button
                 onClick={() => setSelectedAlbum(null)}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white shadow-lg hover:shadow-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Albums
               </button>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 className="text-2xl font-bold text-white">
                   {selectedAlbum.title}
                 </h3>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-blue-200/60 text-sm">
                   {selectedAlbum.photos.length} photos
                 </p>
               </div>
@@ -381,7 +381,7 @@ export default function Albums() {
                         onError={() => setImageError(prev => ({ ...prev, [photo.id]: true }))}
                       />
                     ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center">
                         <ImageIcon className="w-8 h-8 text-white/50" />
                       </div>
                     )}
@@ -429,7 +429,7 @@ export default function Albums() {
                       onError={() => setImageError(prev => ({ ...prev, [photo.id]: true }))}
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center">
                       <ImageIcon className="w-8 h-8 text-white/50" />
                     </div>
                   )}

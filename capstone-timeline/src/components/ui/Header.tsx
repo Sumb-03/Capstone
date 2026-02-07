@@ -10,12 +10,12 @@ interface HeaderProps {
 
 export default function Header({ title, subtitle }: HeaderProps) {
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 sm:py-12 md:py-16 px-4 pt-16 sm:pt-12 md:pt-16">
+    <header className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 py-8 sm:py-12 md:py-16 px-4 pt-16 sm:pt-12 md:pt-16">
       {/* Animated gradient overlay */}
       <motion.div
         className="absolute inset-0 opacity-50"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 50%)',
+          background: 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%)',
         }}
         animate={{
           scale: [1, 1.2, 1],
@@ -69,11 +69,11 @@ export default function Header({ title, subtitle }: HeaderProps) {
           transition={{ type: 'spring', stiffness: 200, damping: 15 }}
         >
           <motion.div
-            className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-white/10"
+            className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500/20 to-emerald-500/20 backdrop-blur-sm border border-white/10"
             animate={{ rotate: [0, 5, -5, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-purple-300" />
+            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-blue-300" />
           </motion.div>
         </motion.div>
         
@@ -83,7 +83,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-emerald-400 to-blue-300">
             {title}
           </span>
         </motion.h1>
@@ -101,7 +101,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
         
         {/* Decorative line */}
         <motion.div
-          className="mt-8 mx-auto w-32 h-1 rounded-full bg-gradient-to-r from-transparent via-purple-500 to-transparent"
+          className="mt-8 mx-auto w-32 h-1 rounded-full bg-gradient-to-r from-transparent via-blue-500 to-transparent"
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -109,7 +109,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
       </div>
       
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-50 dark:from-gray-900 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-900 to-transparent" />
     </header>
   );
 }

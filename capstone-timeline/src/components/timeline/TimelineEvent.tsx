@@ -135,7 +135,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
     <div ref={ref} className="relative mb-8">
       {/* Timeline node - desktop */}
       <motion.div
-        className="absolute left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-white shadow-lg z-10 hidden md:flex items-center justify-center"
+        className="absolute left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-slate-800/80 backdrop-blur-md shadow-lg shadow-blue-500/20 border border-white/10 z-10 hidden md:flex items-center justify-center"
         variants={iconVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
@@ -155,7 +155,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
         animate={isInView ? 'visible' : 'hidden'}
       >
         <motion.div
-          className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] transition-all duration-500 relative"
+          className="bg-slate-800/80 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/10 hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] hover:border-white/20 transition-all duration-500 relative"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           whileHover={{ 
@@ -171,7 +171,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
           {/* Image carousel - larger, 16:9 aspect ratio for PPT feel */}
           {images.length > 0 && currentImage && !imageError[currentImageIndex] && (
             <div 
-              className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-700"
+              className="relative w-full overflow-hidden bg-slate-700"
               style={{ aspectRatio: '16/9' }}
             >
               <AnimatePresence mode="wait">
@@ -201,7 +201,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
               {hasMultipleImages && (
                 <>
                   <motion.button
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg flex items-center justify-center text-gray-800 dark:text-white hover:bg-white hover:scale-110 transition-all z-10"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm shadow-lg flex items-center justify-center text-white border border-white/20 hover:bg-black/70 hover:scale-110 transition-all z-10"
                     onClick={handlePrevImage}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: isHovering ? 1 : 0.6, x: 0 }}
@@ -211,7 +211,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
                     <ChevronLeft className="w-6 h-6" />
                   </motion.button>
                   <motion.button
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg flex items-center justify-center text-gray-800 dark:text-white hover:bg-white hover:scale-110 transition-all z-10"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm shadow-lg flex items-center justify-center text-white border border-white/20 hover:bg-black/70 hover:scale-110 transition-all z-10"
                     onClick={handleNextImage}
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: isHovering ? 1 : 0.6, x: 0 }}
@@ -260,7 +260,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.15 + 0.5 }}
                 >
-                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold bg-white/95 backdrop-blur-sm text-gray-800 shadow-md">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold bg-black/50 backdrop-blur-sm text-white border border-white/20 shadow-md">
                     <Tag className="w-4 h-4" />
                     {event.category}
                   </span>
@@ -277,7 +277,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
                 <Icon className="w-6 h-6 text-white" />
               </div>
               {event.category && (
-                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold bg-white/10 text-white border border-white/10">
                   <Tag className="w-4 h-4" />
                   {event.category}
                 </span>
@@ -285,14 +285,14 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
             </div>
 
             {/* Date - larger */}
-            <div className="flex items-center gap-2 text-base text-gray-500 dark:text-gray-400 mb-4">
+            <div className="flex items-center gap-2 text-base text-blue-300 mb-4">
               <Calendar className="w-5 h-5" />
               <span className="font-semibold tracking-wide">{event.date}</span>
             </div>
 
             {/* Title - much larger for presentation feel */}
             <motion.h3 
-              className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
+              className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.15 + 0.6 }}
@@ -302,7 +302,7 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
 
             {/* Description - larger text for readability */}
             <motion.p 
-              className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
+              className="text-lg text-blue-100/70 leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.15 + 0.7 }}
@@ -325,8 +325,8 @@ export default function TimelineEvent({ event, index, isLeft }: TimelineEventPro
         <div
           className={`hidden md:block absolute top-7 w-20 h-1 bg-gradient-to-r rounded-full ${
             isLeft
-              ? 'right-0 from-transparent to-gray-300 dark:to-gray-600'
-              : 'left-0 from-gray-300 dark:from-gray-600 to-transparent'
+              ? 'right-0 from-transparent to-white/10'
+              : 'left-0 from-white/10 to-transparent'
           }`}
         />
       </motion.div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Timeline from '@/components/timeline/Timeline';
 import Header from '@/components/ui/Header';
@@ -10,15 +10,48 @@ import Members from '@/components/members/Members';
 import Albums from '@/components/albums/Albums';
 import { timelineData } from '@/data/timelineData';
 import { TimelineEvent } from '@/types/timeline';
-import { ArrowLeft, Clock, Users, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Clock, Users, Image as ImageIcon, Globe } from 'lucide-react';
 
 type ViewState = 'europe' | 'portugal' | 'main';
 type TabState = 'timeline' | 'members' | 'albums';
+
+function getStateFromHash(): { view: ViewState; tab: TabState } {
+  if (typeof window === 'undefined') return { view: 'europe', tab: 'timeline' };
+  const hash = window.location.hash.replace('#', '');
+  const parts = hash.split('/');
+  const view = (['europe', 'portugal', 'main'].includes(parts[0]) ? parts[0] : 'europe') as ViewState;
+  const tab = (['timeline', 'members', 'albums'].includes(parts[1]) ? parts[1] : 'timeline') as TabState;
+  return { view, tab };
+}
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewState>('europe');
   const [currentTab, setCurrentTab] = useState<TabState>('timeline');
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(timelineData.events);
+
+  // Restore state from URL hash on mount
+  useEffect(() => {
+    const { view, tab } = getStateFromHash();
+    setCurrentView(view);
+    setCurrentTab(tab);
+  }, []);
+
+  // Sync URL hash when state changes
+  useEffect(() => {
+    const hash = currentView === 'main' ? `main/${currentTab}` : currentView;
+    window.history.replaceState(null, '', `#${hash}`);
+  }, [currentView, currentTab]);
+
+  // Listen for browser back/forward
+  useEffect(() => {
+    const onHashChange = () => {
+      const { view, tab } = getStateFromHash();
+      setCurrentView(view);
+      setCurrentTab(tab);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   // Fetch timeline events from API
   useEffect(() => {
@@ -39,21 +72,21 @@ export default function Home() {
     fetchTimeline();
   }, []);
 
-  const handlePortugalClick = () => {
+  const handlePortugalClick = useCallback(() => {
     setCurrentView('portugal');
-  };
+  }, []);
 
-  const handleCiscoClick = () => {
+  const handleCiscoClick = useCallback(() => {
     setCurrentView('main');
-  };
+  }, []);
 
-  const handleBackToEurope = () => {
+  const handleBackToEurope = useCallback(() => {
     setCurrentView('europe');
-  };
+  }, []);
 
-  const handleBackToPortugal = () => {
+  const handleBackToPortugal = useCallback(() => {
     setCurrentView('portugal');
-  };
+  }, []);
 
   const tabs = [
     { id: 'timeline' as TabState, label: 'Timeline', icon: Clock },
@@ -63,11 +96,17 @@ export default function Home() {
 
   return (
     <main className="min-h-screen overflow-hidden">
-      {/* Cisco logo - only on map views */}
+      {/* Cisco logo - clickable to go back to landing, hidden on main content */}
       {currentView !== 'main' && (
-        <div className="fixed top-4 right-4 z-[200] pointer-events-none">
-          <img src="/images/cisco-logo.png" alt="Cisco" className="w-20 sm:w-24 opacity-70" />
-        </div>
+        <motion.button
+          onClick={handleBackToEurope}
+          className="fixed top-4 right-4 z-[200] cursor-pointer group"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title="Back to landing page"
+        >
+          <img src="/images/cisco-logo.png" alt="Cisco" className="w-20 sm:w-24 opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
+        </motion.button>
       )}
       <AnimatePresence mode="wait">
         {currentView === 'europe' && (
@@ -140,7 +179,7 @@ export default function Home() {
               duration: 0.6,
               ease: [0.25, 0.1, 0.25, 1]
             }}
-            className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"
+            className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950"
           >
             {/* Back button */}
             <motion.div
@@ -151,12 +190,12 @@ export default function Home() {
             >
               <motion.button
                 onClick={handleBackToPortugal}
-                className="flex items-center gap-1 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 text-sm sm:text-base"
+                className="flex items-center gap-1 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 text-sm sm:text-base"
                 whileHover={{ scale: 1.05, x: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="font-semibold hidden sm:inline">Back to Portugal</span>
+                <span className="font-semibold hidden sm:inline">Back to Map</span>
               </motion.button>
             </motion.div>
 
@@ -167,7 +206,7 @@ export default function Home() {
               transition={{ delay: 0.3 }}
               className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50"
             >
-              <div className="flex items-center gap-0.5 sm:gap-1 p-0.5 sm:p-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-full shadow-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-0.5 sm:gap-1 p-0.5 sm:p-1 bg-white/10 backdrop-blur-lg rounded-full shadow-lg border border-white/20">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   return (
@@ -176,8 +215,8 @@ export default function Home() {
                       onClick={() => setCurrentTab(tab.id)}
                       className={`flex items-center gap-1 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition-all duration-300 ${
                         currentTab === tab.id
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
-                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          ? 'bg-gradient-to-r from-blue-500 to-emerald-500 text-white shadow-md shadow-blue-500/30'
+                          : 'text-blue-200 hover:bg-white/10'
                       }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}

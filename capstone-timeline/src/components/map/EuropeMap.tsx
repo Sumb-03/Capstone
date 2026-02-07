@@ -189,7 +189,7 @@ export default function EuropeMap({ onPortugalClick }: EuropeMapProps) {
         }}
       />
       <motion.div
-        className="absolute bottom-10 sm:bottom-20 right-10 sm:right-20 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 bg-purple-500 opacity-20 rounded-full blur-3xl"
+        className="absolute bottom-10 sm:bottom-20 right-10 sm:right-20 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 bg-blue-500 opacity-20 rounded-full blur-3xl"
         animate={{
           scale: [1.2, 1, 1.2],
           opacity: [0.3, 0.2, 0.3],
