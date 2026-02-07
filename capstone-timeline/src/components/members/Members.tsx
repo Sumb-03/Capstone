@@ -433,7 +433,7 @@ export default function Members() {
                           Fun Fact
                         </h4>
                         <p className="text-blue-100/70 text-xs italic">
-                          "{selectedMember.funFact}"
+                          &quot;{selectedMember.funFact}&quot;
                         </p>
                       </div>
                     )}
@@ -444,7 +444,7 @@ export default function Members() {
                         <div className="flex items-start gap-2">
                           <Quote className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
                           <p className="text-blue-100/90 text-xs italic leading-relaxed">
-                            "{selectedMember.quote}"
+                            &quot;{selectedMember.quote}&quot;
                           </p>
                         </div>
                       </div>
