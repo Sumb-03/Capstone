@@ -1,8 +1,14 @@
-# 🗺️ Interactive Map Feature Guide
+# 🗺️ Interactive Map Features Guide
 
 ## Overview
 
-Your timeline website now starts with an **interactive Europe map** featuring Portugal as the focal point. This creates an engaging entry experience before revealing the timeline.
+Your capstone timeline website features **three interactive views** creating a engaging navigation experience:
+
+1. **Europe Map** (Landing) - Animated Europe with Portugal highlighted
+2. **Portugal Map** - Team locations across Portugal with interactive pins
+3. **Main Content** - Timeline, Team Members, and Photo Albums
+
+This guide explains how the maps work and how to customize them.
 
 ## User Experience Flow
 

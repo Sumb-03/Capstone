@@ -1,6 +1,6 @@
-# 🚀 Easy Test Scripts
+# 🚀 How to Run the Capstone Timeline Website
 
-I've created simple scripts to make testing super easy on your PC!
+Simple scripts and instructions to get your website running quickly on Windows!
 
 ## Quick Start (Choose One)
 

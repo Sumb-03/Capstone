@@ -4,8 +4,13 @@
   "name": "Full Name Here",
   "role": "Job Title / Role",
   "city": "Porto",
-  "bio": "A short bio about yourself (1-2 sentences)",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"],
+  "bio": "A short bio about yourself highlighting your professional background and key achievements (2-3 sentences).",
+  "skills": ["Skill 1", "Skill 2", "Skill 3", "Skill 4"],
+  "education": "Bachelor's in Computer Science, University Name (optional)",
+  "hobbies": ["Hobby 1", "Hobby 2", "Hobby 3"],
+  "interests": ["Interest 1", "Interest 2", "Interest 3"],
+  "funFact": "A fun or interesting fact about yourself (optional)",
+  "quote": "Your personal motto or favorite quote (optional)",
   "linkedin": "https://linkedin.com/in/username",
   "email": "email@cisco.com"
 }

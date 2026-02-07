@@ -11,6 +11,11 @@ export interface TeamMember {
   skills: string[];
   linkedin?: string;
   email?: string;
+  hobbies?: string[];
+  interests?: string[];
+  funFact?: string;
+  education?: string;
+  quote?: string;
 }
 
 export const teamMembers: TeamMember[] = [
@@ -22,6 +27,11 @@ export const teamMembers: TeamMember[] = [
     bio: 'Passionate about building scalable applications and learning new technologies.',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
     skills: ['React', 'TypeScript', 'Node.js'],
+    education: "Bachelor's in Computer Science, University of Porto",
+    hobbies: ['Photography', 'Hiking', 'Gaming'],
+    interests: ['AI/ML', 'Web3', 'Sustainability'],
+    funFact: 'Once debugged code while skydiving (on the ground afterwards!)',
+    quote: 'Code is poetry written in logic',
     linkedin: 'https://linkedin.com',
   },
   {
@@ -32,6 +42,11 @@ export const teamMembers: TeamMember[] = [
     bio: 'Enthusiastic developer with a focus on user experience and clean code.',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop&crop=face',
     skills: ['Python', 'Django', 'React'],
+    education: "Master's in Software Engineering, University of Minho",
+    hobbies: ['Rock Climbing', 'Playing Guitar', 'Cooking'],
+    interests: ['UX Design', 'DevOps', 'Open Source'],
+    funFact: 'Can solve a Rubik\'s cube in under 2 minutes',
+    quote: 'First, solve the problem. Then, write the code',
     linkedin: 'https://linkedin.com',
   },
   {

@@ -11,6 +11,11 @@ import {
   User,
   Briefcase,
   X,
+  Heart,
+  Lightbulb,
+  Sparkles,
+  GraduationCap,
+  Quote,
 } from 'lucide-react';
 
 interface TeamMember {
@@ -23,6 +28,11 @@ interface TeamMember {
   skills: string[];
   linkedin?: string;
   email?: string;
+  hobbies?: string[];
+  interests?: string[];
+  funFact?: string;
+  education?: string;
+  quote?: string;
 }
 
 export default function Members() {
@@ -280,7 +290,7 @@ export default function Members() {
           onClick={() => setSelectedMember(null)}
         >
           <motion.div
-            className="bg-slate-800/60 backdrop-blur-md rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-white/10"
+            className="bg-slate-800/60 backdrop-blur-md rounded-3xl shadow-2xl max-w-7xl w-full border border-white/10 max-h-[90vh] overflow-y-auto"
             initial={{ scale: 0.9, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 50 }}
@@ -294,83 +304,177 @@ export default function Members() {
               <X className="w-5 h-5" />
             </button>
 
-            {/* Avatar */}
-            <div className="relative h-64 bg-gradient-to-br from-blue-500 via-emerald-500 to-cyan-500">
-              {selectedMember.avatar && !imageError[selectedMember.id] ? (
-                <Image
-                  src={selectedMember.avatar}
-                  alt={selectedMember.name}
-                  fill
-                  unoptimized
-                  className="object-cover"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <User className="w-32 h-32 text-white/50" />
-                </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-            </div>
-
-            {/* Content */}
-            <div className="p-6 -mt-16 relative">
-              <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/10">
-                <h3 className="text-2xl font-bold text-white mb-1">
-                  {selectedMember.name}
-                </h3>
-                <p className="text-emerald-400 font-medium mb-2">
-                  {selectedMember.role}
-                </p>
-                <div className="flex items-center gap-1 text-blue-300/70 text-sm mb-4">
-                  <MapPin className="w-4 h-4" />
-                  {selectedMember.city}
+            {/* Content - No separate avatar section */}
+            <div className="p-4 md:p-5 relative">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-4">
+                {/* Avatar - Smaller inline */}
+                <div className="flex-shrink-0">
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 via-emerald-500 to-cyan-500">
+                    {selectedMember.avatar && !imageError[selectedMember.id] ? (
+                      <Image
+                        src={selectedMember.avatar}
+                        alt={selectedMember.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <User className="w-20 h-20 text-white/50" />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <p className="text-blue-100/70 mb-6">
-                  {selectedMember.bio}
-                </p>
+                {/* Header Info - Compact */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-1">
+                    {selectedMember.name}
+                  </h3>
+                  <p className="text-emerald-400 font-medium text-sm md:text-base mb-1">
+                    {selectedMember.role}
+                  </p>
+                  <div className="flex items-center gap-1 text-blue-300/70 text-xs md:text-sm mb-2">
+                    <MapPin className="w-3 h-3 md:w-4 md:h-4" />
+                    {selectedMember.city}
+                  </div>
+                  <p className="text-blue-100/70 text-xs md:text-sm line-clamp-3">
+                    {selectedMember.bio}
+                  </p>
+                </div>
+              </div>
 
-                {/* Skills */}
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-blue-200/80 mb-2">
-                    Skills
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedMember.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-3 py-1 text-sm font-medium rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/20"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+              {/* Three Column Layout for Info Sections */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  {/* Column 1 */}
+                  <div className="space-y-4">
+                    {/* Skills */}
+                    <div>
+                      <h4 className="text-xs font-semibold text-blue-200/80 mb-1.5 flex items-center gap-1.5">
+                        <Briefcase className="w-3.5 h-3.5" />
+                        Skills
+                      </h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedMember.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/20"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Education */}
+                    {selectedMember.education && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-blue-200/80 mb-1.5 flex items-center gap-1.5">
+                          <GraduationCap className="w-3.5 h-3.5" />
+                          Education
+                        </h4>
+                        <p className="text-blue-100/70 text-xs">
+                          {selectedMember.education}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Column 2 */}
+                  <div className="space-y-4">
+                    {/* Hobbies */}
+                    {selectedMember.hobbies && selectedMember.hobbies.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-blue-200/80 mb-1.5 flex items-center gap-1.5">
+                          <Heart className="w-3.5 h-3.5" />
+                          Hobbies
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedMember.hobbies.map((hobby) => (
+                            <span
+                              key={hobby}
+                              className="px-2 py-0.5 text-xs rounded-full bg-pink-500/20 text-pink-300 border border-pink-400/20"
+                            >
+                              {hobby}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Interests */}
+                    {selectedMember.interests && selectedMember.interests.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-blue-200/80 mb-1.5 flex items-center gap-1.5">
+                          <Lightbulb className="w-3.5 h-3.5" />
+                          Interests
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedMember.interests.map((interest) => (
+                            <span
+                              key={interest}
+                              className="px-2 py-0.5 text-xs rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/20"
+                            >
+                              {interest}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Column 3 */}
+                  <div className="space-y-4">
+                    {/* Fun Fact */}
+                    {selectedMember.funFact && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-blue-200/80 mb-1.5 flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          Fun Fact
+                        </h4>
+                        <p className="text-blue-100/70 text-xs italic">
+                          "{selectedMember.funFact}"
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Personal Quote */}
+                    {selectedMember.quote && (
+                      <div className="p-3 bg-gradient-to-r from-blue-500/10 to-emerald-500/10 rounded-xl border border-blue-400/20">
+                        <div className="flex items-start gap-2">
+                          <Quote className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                          <p className="text-blue-100/90 text-xs italic leading-relaxed">
+                            "{selectedMember.quote}"
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Social links */}
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2 pt-2">
                   {selectedMember.linkedin && (
                     <a
                       href={selectedMember.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors text-xs"
                     >
-                      <Linkedin className="w-4 h-4" />
+                      <Linkedin className="w-3.5 h-3.5" />
                       LinkedIn
                     </a>
                   )}
                   {selectedMember.email && (
                     <a
                       href={`mailto:${selectedMember.email}`}
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-600 text-white hover:bg-emerald-700 transition-colors text-xs"
                     >
-                      <Mail className="w-4 h-4" />
+                      <Mail className="w-3.5 h-3.5" />
                       Email
                     </a>
                   )}
                 </div>
-              </div>
             </div>
           </motion.div>
         </motion.div>

@@ -1,5 +1,7 @@
 # 🚀 Quick Start Guide
 
+Get your capstone timeline website running in under 5 minutes!
+
 ## Prerequisites Installation
 
 ### 1. Install Node.js

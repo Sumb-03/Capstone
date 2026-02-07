@@ -13,6 +13,11 @@ export interface TeamMember {
   skills: string[];
   linkedin?: string;
   email?: string;
+  hobbies?: string[];
+  interests?: string[];
+  funFact?: string;
+  education?: string;
+  quote?: string;
 }
 
 // Supported image extensions
@@ -83,6 +88,11 @@ export async function GET() {
           skills: info.skills || [],
           linkedin: info.linkedin,
           email: info.email,
+          hobbies: info.hobbies,
+          interests: info.interests,
+          funFact: info.funFact,
+          education: info.education,
+          quote: info.quote,
         };
 
         members.push(member);
