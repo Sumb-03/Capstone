@@ -264,6 +264,7 @@ export default function Albums() {
                         src={album.coverImage}
                         alt={album.title}
                         fill
+                        unoptimized
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         onError={() => setImageError(prev => ({ ...prev, [album.id]: true }))}
                       />
@@ -306,6 +307,7 @@ export default function Albums() {
                               src={photo.src}
                               alt={photo.alt}
                               fill
+                              unoptimized
                               className="object-cover"
                               onError={() => setImageError(prev => ({ ...prev, [photo.id]: true }))}
                             />
@@ -377,6 +379,7 @@ export default function Albums() {
                         src={photo.src}
                         alt={photo.alt}
                         fill
+                        unoptimized
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         onError={() => setImageError(prev => ({ ...prev, [photo.id]: true }))}
                       />
@@ -425,6 +428,7 @@ export default function Albums() {
                       src={photo.src}
                       alt={photo.alt}
                       fill
+                      unoptimized
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       onError={() => setImageError(prev => ({ ...prev, [photo.id]: true }))}
                     />
@@ -487,6 +491,7 @@ export default function Albums() {
                 src={selectedPhoto.src}
                 alt={selectedPhoto.alt}
                 fill
+                unoptimized
                 className="object-contain"
               />
             </motion.div>

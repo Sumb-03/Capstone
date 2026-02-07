@@ -19,7 +19,7 @@ export interface Album {
 }
 
 // Supported image extensions
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.heic'];
 
 function isImageFile(filename: string): boolean {
   const ext = path.extname(filename).toLowerCase();

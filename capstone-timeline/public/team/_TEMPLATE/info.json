@@ -1,5 +1,5 @@
 {
-  "_instructions": "Copy this folder and rename it to the team member's full name. Add a profile picture (photo.jpg, photo.png, etc.) to the folder. Fill in the fields below and delete this _instructions field.",
+  "_instructions": "Copy this folder and rename it to the team member's full name. Add a profile picture (.jpg, .jpeg, .png, etc.) with any filename to the folder. Fill in the fields below and delete this _instructions field.",
   
   "name": "Full Name Here",
   "role": "Job Title / Role",
@@ -7,6 +7,5 @@
   "bio": "A short bio about yourself (1-2 sentences)",
   "skills": ["Skill 1", "Skill 2", "Skill 3"],
   "linkedin": "https://linkedin.com/in/username",
-  "github": "https://github.com/username",
   "email": "email@cisco.com"
 }

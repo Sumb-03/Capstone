@@ -8,7 +8,6 @@ import {
   MapPin,
   Mail,
   Linkedin,
-  Github,
   User,
   Briefcase,
   X,
@@ -23,7 +22,6 @@ interface TeamMember {
   avatar?: string;
   skills: string[];
   linkedin?: string;
-  github?: string;
   email?: string;
 }
 
@@ -199,6 +197,7 @@ export default function Members() {
                           src={member.avatar}
                           alt={member.name}
                           fill
+                          unoptimized
                           className="object-cover"
                           onError={() => setImageError(prev => ({ ...prev, [member.id]: true }))}
                         />
@@ -252,17 +251,6 @@ export default function Members() {
                             <Linkedin className="w-4 h-4" />
                           </a>
                         )}
-                        {member.github && (
-                          <a
-                            href={member.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 transition-colors"
-                          >
-                            <Github className="w-4 h-4" />
-                          </a>
-                        )}
                         {member.email && (
                           <a
                             href={`mailto:${member.email}`}
@@ -313,6 +301,7 @@ export default function Members() {
                   src={selectedMember.avatar}
                   alt={selectedMember.name}
                   fill
+                  unoptimized
                   className="object-cover"
                 />
               ) : (
@@ -369,17 +358,6 @@ export default function Members() {
                     >
                       <Linkedin className="w-4 h-4" />
                       LinkedIn
-                    </a>
-                  )}
-                  {selectedMember.github && (
-                    <a
-                      href={selectedMember.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors border border-white/10"
-                    >
-                      <Github className="w-4 h-4" />
-                      GitHub
                     </a>
                   )}
                   {selectedMember.email && (

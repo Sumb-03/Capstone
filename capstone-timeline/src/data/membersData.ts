@@ -10,7 +10,6 @@ export interface TeamMember {
   avatar?: string;
   skills: string[];
   linkedin?: string;
-  github?: string;
   email?: string;
 }
 
@@ -24,7 +23,6 @@ export const teamMembers: TeamMember[] = [
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
     skills: ['React', 'TypeScript', 'Node.js'],
     linkedin: 'https://linkedin.com',
-    github: 'https://github.com',
   },
   {
     id: 'member-2',
@@ -44,7 +42,6 @@ export const teamMembers: TeamMember[] = [
     bio: 'Specialized in database design and API development.',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face',
     skills: ['Java', 'Spring Boot', 'PostgreSQL'],
-    github: 'https://github.com',
   },
   {
     id: 'member-4',
@@ -55,7 +52,6 @@ export const teamMembers: TeamMember[] = [
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
     skills: ['AWS', 'Docker', 'Kubernetes'],
     linkedin: 'https://linkedin.com',
-    github: 'https://github.com',
   },
   {
     id: 'member-5',
@@ -75,7 +71,6 @@ export const teamMembers: TeamMember[] = [
     bio: 'Data-driven problem solver with expertise in machine learning.',
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face',
     skills: ['Python', 'TensorFlow', 'SQL'],
-    github: 'https://github.com',
   },
   {
     id: 'member-7',
@@ -95,7 +90,6 @@ export const teamMembers: TeamMember[] = [
     bio: 'Quality advocate ensuring software meets the highest standards.',
     avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face',
     skills: ['Selenium', 'Jest', 'Cypress'],
-    github: 'https://github.com',
   },
   {
     id: 'member-9',
@@ -106,6 +100,5 @@ export const teamMembers: TeamMember[] = [
     avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=face',
     skills: ['Azure', 'Terraform', 'Microservices'],
     linkedin: 'https://linkedin.com',
-    github: 'https://github.com',
   },
 ];

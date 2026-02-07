@@ -1,10 +1,9 @@
 {
-  "name": "Full Name Here",
-  "role": "Job Title / Role",
+  "name": "Ricardo Simões",
+  "role": "Technical Consulting Engineer - AAA",
   "city": "Aveiro",
   "bio": "A short bio about yourself (1-2 sentences)",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"],
-  "linkedin": "https://linkedin.com/in/username",
-  "github": "https://github.com/username",
-  "email": "email@cisco.com"
+  "skills": ["CCNA", "CCNA Auto", "CCNP Enterprise"],
+  "linkedin": "https://www.linkedin.com/in/ricardosimoes03/",
+  "email": "ricsimoe@cisco.com"
 }

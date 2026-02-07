@@ -12,12 +12,11 @@ export interface TeamMember {
   avatar?: string;
   skills: string[];
   linkedin?: string;
-  github?: string;
   email?: string;
 }
 
 // Supported image extensions
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.heic'];
 
 function isImageFile(filename: string): boolean {
   const ext = path.extname(filename).toLowerCase();
@@ -71,7 +70,7 @@ export async function GET() {
         );
 
         const avatar = imageFile 
-          ? `/team/${encodeURIComponent(folder.name)}/${encodeURIComponent(imageFile)}`
+          ? `/team/${folder.name}/${imageFile}`
           : undefined;
 
         const member: TeamMember = {
@@ -83,7 +82,6 @@ export async function GET() {
           avatar,
           skills: info.skills || [],
           linkedin: info.linkedin,
-          github: info.github,
           email: info.email,
         };
 
@@ -93,8 +91,8 @@ export async function GET() {
       }
     }
 
-    // Sort members alphabetically by name
-    members.sort((a, b) => a.name.localeCompare(b.name));
+    // Sort members alphabetically by city, then by name within the same city
+    members.sort((a, b) => a.city.localeCompare(b.city) || a.name.localeCompare(b.name));
 
     return NextResponse.json({ members });
   } catch (error) {
