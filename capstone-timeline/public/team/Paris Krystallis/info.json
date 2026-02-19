@@ -1,12 +1,13 @@
 {
-  "name": "Full Name Here",
-  "role": "Job Title / Role",
-  "city": "Porto",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"],
-  "linkedin": "https://linkedin.com/in/username",
-  "email": "email@cisco.com",
-  "education": "Your degree, institution, and graduation year",
-  "hobbies": ["Hobby 1", "Hobby 2", "Hobby 3"],
-  "interests": ["Interest 1", "Interest 2", "Interest 3"],
-  "quote": "Your favorite quote or personal motto"
+ 
+  "name": "Paris Krystallis",
+  "role": "Technical Consulting Engineer - DC SV",
+  "city": "Thessaloniki",
+  "skills": ["CCNA", "Ergonomics", "Predictive AI", "Coding"],
+  "education": "Bachelor's in Physical Therapy, MSc in Health and Exercise",
+  "hobbies": ["Snowboarding", "Padel", "Video Games"],
+  "interests": ["Coffee", "Travel", "Cats"],
+  "quote": "Focus on your destination and don't allow the difficulties to define your path.",
+  "linkedin": "https://www.linkedin.com/in/paris-krystallis-846a881ab/",
+  "email": "pkrystal@cisco.com"
 }

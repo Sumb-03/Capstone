@@ -1,12 +1,12 @@
 {
-  "name": "Full Name Here",
-  "role": "Job Title / Role",
-  "city": "Porto",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"],
-  "linkedin": "https://linkedin.com/in/username",
-  "email": "email@cisco.com",
-  "education": "Your degree, institution, and graduation year",
-  "hobbies": ["Hobby 1", "Hobby 2", "Hobby 3"],
-  "interests": ["Interest 1", "Interest 2", "Interest 3"],
-  "quote": "Your favorite quote or personal motto"
+  "name": "Francisco Inácio",
+  "role": "Consulting Engineer - AAA",
+  "city": "Lisbon",
+  "skills": ["CCNA", "Cisco Gen AI Green Belt"],
+  "education": "42Lisboa",
+  "hobbies": ["Climbing", "Karting", "Film watching"],
+  "interests": ["Formula 1", "Film", "Horology"],
+  "quote": "",
+  "linkedin": "https://www.linkedin.com/in/francisco-in%C3%A1cio-5b5554101/",
+  "email": "finacio@cisco.com"
 }
