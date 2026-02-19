@@ -8,14 +8,12 @@ export interface TeamMember {
   name: string;
   role: string;
   city: string;
-  bio: string;
   avatar?: string;
   skills: string[];
   linkedin?: string;
   email?: string;
   hobbies?: string[];
   interests?: string[];
-  funFact?: string;
   education?: string;
   quote?: string;
 }
@@ -83,14 +81,12 @@ export async function GET() {
           name: info.name || folder.name,
           role: info.role || 'Team Member',
           city: info.city || 'Portugal',
-          bio: info.bio || '',
           avatar,
           skills: info.skills || [],
           linkedin: info.linkedin,
           email: info.email,
           hobbies: info.hobbies,
           interests: info.interests,
-          funFact: info.funFact,
           education: info.education,
           quote: info.quote,
         };

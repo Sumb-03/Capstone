@@ -13,7 +13,6 @@ import {
   X,
   Heart,
   Lightbulb,
-  Sparkles,
   GraduationCap,
   Quote,
 } from 'lucide-react';
@@ -23,14 +22,12 @@ interface TeamMember {
   name: string;
   role: string;
   city: string;
-  bio: string;
   avatar?: string;
   skills: string[];
   linkedin?: string;
   email?: string;
   hobbies?: string[];
   interests?: string[];
-  funFact?: string;
   education?: string;
   quote?: string;
 }
@@ -338,9 +335,6 @@ export default function Members() {
                     <MapPin className="w-3 h-3 md:w-4 md:h-4" />
                     {selectedMember.city}
                   </div>
-                  <p className="text-blue-100/70 text-xs md:text-sm line-clamp-3">
-                    {selectedMember.bio}
-                  </p>
                 </div>
               </div>
 
@@ -425,19 +419,6 @@ export default function Members() {
 
                   {/* Column 3 */}
                   <div className="space-y-4">
-                    {/* Fun Fact */}
-                    {selectedMember.funFact && (
-                      <div>
-                        <h4 className="text-xs font-semibold text-blue-200/80 mb-1.5 flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5" />
-                          Fun Fact
-                        </h4>
-                        <p className="text-blue-100/70 text-xs italic">
-                          &quot;{selectedMember.funFact}&quot;
-                        </p>
-                      </div>
-                    )}
-
                     {/* Personal Quote */}
                     {selectedMember.quote && (
                       <div className="p-3 bg-gradient-to-r from-blue-500/10 to-emerald-500/10 rounded-xl border border-blue-400/20">
