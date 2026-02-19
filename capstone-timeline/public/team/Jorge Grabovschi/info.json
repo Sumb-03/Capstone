@@ -5,7 +5,8 @@
   "skills": ["CCNA", "CCNA Automation", "Data Center Core"],
   "education": "Bachelor's in Computer Science, Polytechnic of Leiria",
   "hobbies": ["Playing Guitar", "Videogames", "Running"],
-  "interests": ["Technologies", "Music", ""],
+  "interests": ["Technologies", "Music"],
+  "quote": "",
   "linkedin": "https://linkedin.com/in/jorge-grabovschi-79a643256",
   "email": "jgrabovs@cisco.com"
 }
