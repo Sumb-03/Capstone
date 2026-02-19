@@ -338,8 +338,8 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
                 <motion.div
                   className="absolute"
                   style={{
-                    left: `${markerPos.x + 35}px`,
-                    top: `${markerPos.y - 25}px`,
+                    left: `${markerPos.x + 55}px`,
+                    top: `${markerPos.y - 30}px`,
                     transform: 'translate(-50%, -50%)',
                     zIndex: 25,
                   }}
@@ -357,7 +357,7 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
                     transition={{ delay: 1.6 }}
                   >
                     <div className="bg-blue-600/90 text-white px-2 py-0.5 rounded-md text-[7px] sm:text-[9px] font-medium shadow-lg border border-blue-400/50">
-                      {lisboaTeam.memberCount} local
+                      {lisboaTeam.memberCount} Lisbon
                     </div>
                   </motion.div>
                 </motion.div>
@@ -501,6 +501,53 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
                   </g>
                 );
               })}
+
+              {/* Flight path from Lisboa team marker to Cisco office */}
+              {(() => {
+                const lisboaTeam = teamLocations.find(t => t.city === 'Lisboa');
+                if (!lisboaTeam) return null;
+
+                const fromX = markerPos.x + 55;
+                const fromY = markerPos.y - 30;
+                const toX = markerPos.x;
+                const toY = markerPos.y;
+                const midX = (fromX + toX) / 2 + 12;
+                const midY = (fromY + toY) / 2 - 8;
+                const pathD = `M ${fromX} ${fromY} Q ${midX} ${midY} ${toX} ${toY}`;
+                const delay = 1.2;
+
+                return (
+                  <g key="lisboa-flight-path">
+                    <motion.path
+                      d={pathD}
+                      fill="none"
+                      stroke="url(#flightGradient)"
+                      strokeWidth="2"
+                      strokeDasharray="8 6"
+                      filter="url(#glow)"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ delay, duration: 1.2, ease: 'easeInOut' }}
+                    />
+
+                    <motion.circle
+                      r="4"
+                      fill="#60a5fa"
+                      filter="url(#glow)"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0, 1, 1, 0] }}
+                      transition={{ delay: delay + 1.6, duration: 2.5, repeat: Infinity, repeatDelay: 1 }}
+                    >
+                      <animateMotion
+                        dur="2.5s"
+                        repeatCount="indefinite"
+                        begin={`${delay + 1.6}s`}
+                        path={pathD}
+                      />
+                    </motion.circle>
+                  </g>
+                );
+              })()}
             </svg>
           )}
           </div>
