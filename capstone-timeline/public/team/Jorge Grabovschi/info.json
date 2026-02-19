@@ -1,12 +1,11 @@
 {
-  "name": "Full Name Here",
-  "role": "Job Title / Role",
+  "name": "Jorge Grabovschi",
+  "role": "Technical Consulting Engineer - Server Virtualization",
   "city": "Leiria",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"],
-  "linkedin": "https://linkedin.com/in/username",
-  "email": "email@cisco.com",
-  "education": "Your degree, institution, and graduation year",
-  "hobbies": ["Hobby 1", "Hobby 2", "Hobby 3"],
-  "interests": ["Interest 1", "Interest 2", "Interest 3"],
-  "quote": "Your favorite quote or personal motto"
+  "skills": ["CCNA", "CCNA Automation", "DC Core"],
+  "education": "Bachelor's in Computer Science, Polytechnic of Leiria",
+  "hobbies": ["Playing Guitar", "Videogames", "Running"],
+  "interests": ["Technologies", "Music", ""],
+  "linkedin": "https://linkedin.com/in/jorge-grabovschi-79a643256",
+  "email": "jgrabovs@cisco.com"
 }
