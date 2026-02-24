@@ -47,6 +47,7 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
   const [mapSize, setMapSize] = useState(800);
   const [showOfficePreview, setShowOfficePreview] = useState(false);
   const ciscoMarkerRef = useRef<HTMLDivElement>(null);
+  const lastSvgSizeRef = useRef<{ width: number; height: number } | null>(null);
 
   // We want the mainland to fill ~55vh in height.
   // Mainland SVG coords: y ~130-370 => height ~240
@@ -142,8 +143,6 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
         }
       });
     }
-    setCityPositions(positions);
-
     // Compute clip region: pixel coords of mainland bbox within the SVG element
     const paddingLeft = 60;
     const paddingRight = 100; // extra right padding to avoid clipping effects
@@ -155,19 +154,19 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
     const clipHeight = (maxY - minY) * scaleY + paddingTop + paddingBottom;
 
     // Position the clip container so that only mainland is visible and centered
+    setCityPositions(positions);
+
     setClipStyle({
       width: clipWidth,
       height: clipHeight,
       overflow: 'hidden',
     });
 
-    // Position the SVG wrapper inside the clip container
     if (mapWrapperRef.current) {
       mapWrapperRef.current.style.marginLeft = `-${clipLeft}px`;
       mapWrapperRef.current.style.marginTop = `-${clipTop}px`;
     }
 
-    // Store clip offset for SVG overlay coordinate conversion
     setClipOffset({ left: clipLeft, top: clipTop });
 
     setReady(true);
@@ -175,47 +174,87 @@ export default function PortugalMap({ onCiscoClick, onBackClick }: PortugalMapPr
   }, []);
 
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval>;
-    let attempts = 0;
-    const maxAttempts = 100;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    let settleTimeout: ReturnType<typeof setTimeout> | undefined;
+    let mutationObserver: MutationObserver | null = null;
+    let resizeObserver: ResizeObserver | null = null;
     let done = false;
+    let attempts = 0;
+    let stableCount = 0;
+    const maxAttempts = 80;
 
-    const tryCompute = () => {
-      if (done) return;
-      attempts++;
-      if (computePositions()) {
+    const runCompute = () => {
+      if (done || !mapWrapperRef.current) return;
+
+      attempts += 1;
+      const ok = computePositions();
+      const svgEl = mapWrapperRef.current.querySelector('svg');
+
+      if (ok && svgEl) {
+        const rect = svgEl.getBoundingClientRect();
+        const previous = lastSvgSizeRef.current;
+
+        if (previous) {
+          const widthDelta = Math.abs(previous.width - rect.width);
+          const heightDelta = Math.abs(previous.height - rect.height);
+
+          if (widthDelta < 1 && heightDelta < 1) {
+            stableCount += 1;
+          } else {
+            stableCount = 0;
+          }
+        }
+
+        lastSvgSizeRef.current = { width: rect.width, height: rect.height };
+
+        if (stableCount >= 4) {
+          done = true;
+          if (intervalId) clearInterval(intervalId);
+          if (settleTimeout) clearTimeout(settleTimeout);
+          mutationObserver?.disconnect();
+          resizeObserver?.disconnect();
+          return;
+        }
+      }
+
+      if (attempts >= maxAttempts) {
         done = true;
-        clearInterval(intervalId);
-        observer?.disconnect();
-      } else if (attempts >= maxAttempts) {
-        clearInterval(intervalId);
+        if (intervalId) clearInterval(intervalId);
+        if (settleTimeout) clearTimeout(settleTimeout);
+        mutationObserver?.disconnect();
+        resizeObserver?.disconnect();
       }
     };
 
-    // Delay initial measurement to let the parent framer-motion
-    // scale animation (0.3 → 1) complete — getBoundingClientRect()
-    // returns wrong values while the parent is mid-transform.
-    const startDelay = setTimeout(() => {
-      intervalId = setInterval(tryCompute, 200);
-    }, 900);
+    const scheduleCompute = () => {
+      if (done) return;
+      if (settleTimeout) clearTimeout(settleTimeout);
+      settleTimeout = setTimeout(runCompute, 80);
+    };
 
-    // Also observe DOM changes in case the SVG renders late
-    let observer: MutationObserver | null = null;
+    // Start quickly and keep recomputing until SVG dimensions settle.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(runCompute);
+    });
+    intervalId = setInterval(runCompute, 120);
+
     if (mapWrapperRef.current) {
-      let debounceTimer: ReturnType<typeof setTimeout>;
-      observer = new MutationObserver(() => {
-        if (done) return;
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(tryCompute, 100);
-      });
-      observer.observe(mapWrapperRef.current, { childList: true, subtree: true });
+      mutationObserver = new MutationObserver(scheduleCompute);
+      mutationObserver.observe(mapWrapperRef.current, { childList: true, subtree: true, attributes: true });
+    }
+
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(scheduleCompute);
+      if (mapWrapperRef.current) resizeObserver.observe(mapWrapperRef.current);
+      if (clipRef.current) resizeObserver.observe(clipRef.current);
     }
 
     return () => {
       done = true;
-      clearTimeout(startDelay);
-      clearInterval(intervalId);
-      observer?.disconnect();
+      if (intervalId) clearInterval(intervalId);
+      if (settleTimeout) clearTimeout(settleTimeout);
+      mutationObserver?.disconnect();
+      resizeObserver?.disconnect();
     };
   }, [computePositions, mapSize]);
 
