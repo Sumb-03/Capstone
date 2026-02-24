@@ -3,11 +3,12 @@
   "name": "Paris Krystallis",
   "role": "Technical Consulting Engineer - DC SV",
   "city": "Thessaloniki",
-  "skills": ["CCNA", "Ergonomics", "Predictive AI", "Coding"],
+  "skills": ["CCNA", "Ergonomics", "Cisco Gen AI Belts", "Predictive AI", "Coding"],
   "education": "Bachelor's in Physical Therapy, MSc in Health and Exercise",
   "hobbies": ["Snowboarding", "Padel", "Video Games"],
   "interests": ["Coffee", "Travel", "Cats"],
   "quote": "Focus on your destination and don't allow the difficulties to define your path.",
   "linkedin": "https://www.linkedin.com/in/paris-krystallis-846a881ab/",
+  "credly": "https://www.credly.com/users/paris-krystallis/edit#credly",
   "email": "pkrystal@cisco.com"
 }

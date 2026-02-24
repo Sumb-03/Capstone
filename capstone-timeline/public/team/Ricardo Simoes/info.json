@@ -2,11 +2,12 @@
   "name": "Ricardo Simões",
   "role": "Technical Consulting Engineer - AAA",
   "city": "Aveiro",
-  "skills": ["CCNA/CCNA Auto", "CCNP Enterprise","Teamwork", "Problem-Solving"],
+  "skills": ["CCNA/CCNA Auto", "CCNP Enterprise","Security Core", "Teamwork", "Problem-Solving"],
   "linkedin": "https://www.linkedin.com/in/ricardosimoes03/",
+  "credly": "https://www.credly.com/users/ricardosimoes03/badges#credly",
   "email": "ricsimoe@cisco.com",
   "education": "Bachelor's in Computer Science - ISEP",
-  "hobbies": ["Gym", "Martial Arts", "Formula 1"],
+  "hobbies": ["Gym", "Martial Arts", "Simracing"],
   "interests": ["Security", "Automation", "Enterprise Networking"],
   "quote": "Striving to be better than yesterday"
 }

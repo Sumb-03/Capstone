@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ccnp-enterprise",
+    "title": "CCNP Enterprise",
+    "count": 2,
+    "badge": "Professional Badge",
+    "note": "Advanced enterprise networking certifications"
+  },
+  {
+    "id": "ccna-first-try",
+    "title": "CCNA (First Try)",
+    "count": 7,
+    "badge": "Associate Badge",
+    "note": "Passed on first attempt"
+  },
+  {
+    "id": "ccna-automation",
+    "title": "CCNA Automation",
+    "count": 4,
+    "badge": "Automation Badge",
+    "note": "Network automation and programmability"
+  },
+  {
+    "id": "security-core",
+    "title": "Security Core",
+    "count": 1,
+    "badge": "Security Badge",
+    "note": "Core security infrastructure and operations"
+  },
+  {
+    "id": "data-center-core",
+    "title": "Data Center Core",
+    "count": 1,
+    "badge": "Core Badge",
+    "note": "Core data center expertise"
+  },
+  {
+    "id": "ai-white-belt",
+    "title": "GEN AI White Belt",
+    "count": 7,
+    "badge": "GEN AI White Belt Badge",
+    "note": "Team achievements in the GEN AI White Belt track"
+  },
+  {
+    "id": "ai-green-belt",
+    "title": "GEN AI Green Belt",
+    "count": 7,
+    "badge": "GEN AI Green Belt Badge",
+    "note": "Team achievements in the GEN AI Green Belt track"
+  },
+  {
+    "id": "ai-blue-belt",
+    "title": "GEN AI Blue Belt",
+    "count": 7,
+    "badge": "GEN AI Blue Belt Badge",
+    "note": "Team achievements in the GEN AI Blue Belt track"
+  }
+]

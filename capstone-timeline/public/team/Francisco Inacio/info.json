@@ -2,11 +2,12 @@
   "name": "Francisco Inácio",
   "role": "Consulting Engineer - AAA",
   "city": "Lisbon",
-  "skills": ["CCNA", "Cisco Gen AI Green Belt"],
+  "skills": ["CCNA", "Cisco Gen AI Belts", "Teamwork"],
   "education": "42Lisboa",
   "hobbies": ["Climbing", "Karting", "Film watching"],
   "interests": ["Formula 1", "Film", "Horology"],
   "quote": "",
   "linkedin": "https://www.linkedin.com/in/francisco-in%C3%A1cio-5b5554101/",
+  "credly": "https://www.credly.com/users/francisco-inacio/",
   "email": "finacio@cisco.com"
 }

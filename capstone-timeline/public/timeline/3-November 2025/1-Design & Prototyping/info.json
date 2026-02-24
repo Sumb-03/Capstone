@@ -1,8 +1,10 @@
 {
-  "title": "Design & Prototyping",
+  "title": "TAC Bootcamp",
   "date": "November 2025",
-  "description": "Created innovative wireframes and interactive prototypes. Design thinking workshops in Porto led to breakthrough UI/UX solutions.",
-  "icon": "palette",
-  "color": "bg-purple-500",
-  "category": "Design"
+  "description": "Technical Assistance Center bootcamp with practical support workflows, case handling, and escalation best practices.",
+  "albumFolder": "",
+  "albumFolders": [],
+  "icon": "code",
+  "color": "bg-indigo-500",
+  "category": "Bootcamp"
 }

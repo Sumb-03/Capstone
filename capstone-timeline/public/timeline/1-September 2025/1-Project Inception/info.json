@@ -1,8 +1,10 @@
 {
-  "title": "Project Inception",
+  "title": "First Week Onboarding",
   "date": "September 2025",
-  "description": "Initial brainstorming and project conception in Lisbon. Team formation and scope definition with stakeholders from across Europe.",
+  "description": "Kickoff and onboarding activities for the full cohort. Introduction to goals, workflows, tools, and learning roadmap.",
+  "albumFolder": "",
+  "albumFolders": [],
   "icon": "rocket",
-  "color": "bg-red-500",
-  "category": "Planning"
+  "color": "bg-blue-500",
+  "category": "Learning"
 }

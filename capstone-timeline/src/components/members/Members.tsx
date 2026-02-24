@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import achievementsData from '@/data/achievements.json';
 import { Loader2 } from 'lucide-react';
 import {
   MapPin,
@@ -15,6 +16,7 @@ import {
   Lightbulb,
   GraduationCap,
   Quote,
+  Award,
 } from 'lucide-react';
 
 interface TeamMember {
@@ -25,11 +27,20 @@ interface TeamMember {
   avatar?: string;
   skills: string[];
   linkedin?: string;
+  credly?: string;
   email?: string;
   hobbies?: string[];
   interests?: string[];
   education?: string;
   quote?: string;
+}
+
+interface CertificationAchievement {
+  id: string;
+  title: string;
+  count: number;
+  badge: string;
+  note: string;
 }
 
 export default function Members() {
@@ -38,6 +49,11 @@ export default function Members() {
   const [error, setError] = useState<string | null>(null);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [imageError, setImageError] = useState<Record<string, boolean>>({});
+  const [activeSection, setActiveSection] = useState<'team' | 'achievements'>('team');
+
+  const achievements = achievementsData as CertificationAchievement[];
+
+  const totalAchievements = achievements.reduce((sum, achievement) => sum + achievement.count, 0);
 
   // Fetch team members from API
   useEffect(() => {
@@ -147,132 +163,223 @@ export default function Members() {
               </p>
             </motion.div>
 
-            {/* Team stats */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8 md:mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-              {members.length}
-            </div>
-            <div className="text-xs sm:text-sm text-blue-200/60">Team Members</div>
-          </div>
-          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
-              {Object.keys(groupedByCity).length}
-            </div>
-            <div className="text-xs sm:text-sm text-blue-200/60">Cities</div>
-          </div>
-          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
-              {new Set(members.flatMap(m => m.skills)).size}
-            </div>
-            <div className="text-xs sm:text-sm text-blue-200/60">Skills</div>
-          </div>
-          <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
-            <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-              100%
-            </div>
-            <div className="text-xs sm:text-sm text-blue-200/60">Dedication</div>
-          </div>
-        </motion.div>
-
-        {/* Members grid - all together */}
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
+              className="flex justify-center mb-6 sm:mb-8"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
             >
-              {members.map((member) => (
-                <motion.div
-                  key={member.id}
-                  variants={cardVariants}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setSelectedMember(member)}
-                  className="cursor-pointer"
+              <div className="flex items-center gap-1 p-1.5 bg-slate-900/60 backdrop-blur-lg rounded-full shadow-xl border border-white/20">
+                <motion.button
+                  onClick={() => setActiveSection('team')}
+                  className={`px-4 sm:px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    activeSection === 'team'
+                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/30'
+                      : 'text-blue-200 hover:bg-white/10'
+                  }`}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                 >
-                  <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border border-white/10 hover:shadow-2xl hover:border-white/20 transition-all duration-300">
-                    {/* Avatar */}
-                    <div className="relative h-40 sm:h-48 bg-gradient-to-br from-blue-500 to-emerald-500">
-                      {member.avatar && !imageError[member.id] ? (
-                        <Image
-                          src={member.avatar}
-                          alt={member.name}
-                          fill
-                          unoptimized
-                          className="object-cover"
-                          onError={() => setImageError(prev => ({ ...prev, [member.id]: true }))}
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <User className="w-16 h-16 sm:w-20 sm:h-20 text-white/50" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      
-                      {/* Name overlay on image */}
-                      <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                        <h4 className="text-lg sm:text-xl font-bold text-white">{member.name}</h4>
-                        <div className="flex items-center gap-1 text-white/80 text-xs sm:text-sm">
-                          <Briefcase className="w-3 h-3" />
-                          {member.role}
-                        </div>
-                      </div>
+                  Team
+                </motion.button>
+                <motion.button
+                  onClick={() => setActiveSection('achievements')}
+                  className={`px-4 sm:px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                    activeSection === 'achievements'
+                      ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md shadow-emerald-500/30'
+                      : 'text-blue-200 hover:bg-white/10'
+                  }`}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Achievements
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {activeSection === 'team' && (
+              <>
+                <motion.div
+                  className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8 md:mb-12"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+                    <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+                      {members.length}
                     </div>
-
-                    {/* Content */}
-                    <div className="p-3 sm:p-4">
-                      {/* City */}
-                      <div className="flex items-center gap-1 text-blue-300/70 text-xs mb-2">
-                        <MapPin className="w-3 h-3" />
-                        {member.city}
-                      </div>
-
-                      {/* Skills */}
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {member.skills.slice(0, 3).map((skill) => (
-                          <span
-                            key={skill}
-                            className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/20"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Social links */}
-                      <div className="flex items-center gap-2">
-                        {member.linkedin && (
-                          <a
-                            href={member.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-white/10 text-blue-300 hover:bg-blue-500/30 hover:text-blue-200 transition-colors"
-                          >
-                            <Linkedin className="w-4 h-4" />
-                          </a>
-                        )}
-                        {member.email && (
-                          <a
-                            href={`mailto:${member.email}`}
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-full bg-white/10 text-emerald-300 hover:bg-emerald-500/30 hover:text-emerald-200 transition-colors"
-                          >
-                            <Mail className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
+                    <div className="text-xs sm:text-sm text-blue-200/60">Team Members</div>
+                  </div>
+                  <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+                    <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
+                      {Object.keys(groupedByCity).length}
                     </div>
+                    <div className="text-xs sm:text-sm text-blue-200/60">Cities</div>
+                  </div>
+                  <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+                    <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
+                      {new Set(members.flatMap(m => m.skills)).size}
+                    </div>
+                    <div className="text-xs sm:text-sm text-blue-200/60">Skills</div>
+                  </div>
+                  <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 text-center shadow-lg border border-white/10">
+                    <div className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+                      100%
+                    </div>
+                    <div className="text-xs sm:text-sm text-blue-200/60">Dedication</div>
                   </div>
                 </motion.div>
-              ))}
-            </motion.div>
+
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {members.map((member) => (
+                    <motion.div
+                      key={member.id}
+                      variants={cardVariants}
+                      whileHover={{ y: -8, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setSelectedMember(member)}
+                      className="cursor-pointer"
+                    >
+                      <div className="bg-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border border-white/10 hover:shadow-2xl hover:border-white/20 transition-all duration-300">
+                        <div className="relative h-40 sm:h-48 bg-gradient-to-br from-blue-500 to-emerald-500">
+                          {member.avatar && !imageError[member.id] ? (
+                            <Image
+                              src={member.avatar}
+                              alt={member.name}
+                              fill
+                              unoptimized
+                              className="object-cover"
+                              onError={() => setImageError(prev => ({ ...prev, [member.id]: true }))}
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <User className="w-16 h-16 sm:w-20 sm:h-20 text-white/50" />
+                            </div>
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                            <h4 className="text-lg sm:text-xl font-bold text-white">{member.name}</h4>
+                            <div className="flex items-center gap-1 text-white/80 text-xs sm:text-sm">
+                              <Briefcase className="w-3 h-3" />
+                              {member.role}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-3 sm:p-4">
+                          <div className="flex items-center gap-1 text-blue-300/70 text-xs mb-2">
+                            <MapPin className="w-3 h-3" />
+                            {member.city}
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {member.skills.slice(0, 3).map((skill) => (
+                              <span
+                                key={skill}
+                                className="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/20"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {member.linkedin && (
+                              <a
+                                href={member.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-white/10 text-blue-300 hover:bg-blue-500/30 hover:text-blue-200 transition-colors"
+                              >
+                                <Linkedin className="w-4 h-4" />
+                              </a>
+                            )}
+                            {member.credly && (
+                              <a
+                                href={member.credly}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-white/10 text-amber-300 hover:bg-amber-500/30 hover:text-amber-200 transition-colors"
+                                title="Credly"
+                              >
+                                <Award className="w-4 h-4" />
+                              </a>
+                            )}
+                            {member.email && (
+                              <a
+                                href={`mailto:${member.email}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="p-2 rounded-full bg-white/10 text-emerald-300 hover:bg-emerald-500/30 hover:text-emerald-200 transition-colors"
+                              >
+                                <Mail className="w-4 h-4" />
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </>
+            )}
+
+            {activeSection === 'achievements' && (
+              <motion.div
+                className="space-y-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+              >
+                <div className="bg-gradient-to-br from-slate-800/80 via-slate-800/60 to-blue-900/40 backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-white/10 shadow-xl">
+                  <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/20">
+                        <Award className="w-5 h-5 text-blue-300" />
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-white">Team Certifications</h3>
+                    </div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-sm font-medium">
+                      <Award className="w-5 h-5 text-blue-300" />
+                      Total: {totalAchievements}
+                    </div>
+                  </div>
+                  <p className="text-sm sm:text-base text-blue-200/70">
+                    Our team currently holds {totalAchievements} certification achievements across networking and automation tracks.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  {achievements.map((achievement) => (
+                    <motion.div
+                      key={achievement.id}
+                      className="bg-gradient-to-br from-slate-800/70 to-slate-900/70 backdrop-blur-md rounded-2xl p-5 border border-white/10 shadow-lg hover:shadow-2xl hover:border-cyan-300/30 transition-all duration-300"
+                      whileHover={{ y: -4, scale: 1.01 }}
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-xs uppercase tracking-wider text-blue-200/50">Certification</span>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                          <Award className="w-3 h-3" />
+                          {achievement.badge}
+                        </span>
+                      </div>
+                      <div className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-emerald-400 mb-2">
+                        {achievement.count}
+                      </div>
+                      <h4 className="text-lg font-semibold text-white mb-1">{achievement.title}</h4>
+                      <p className="text-sm text-blue-200/60">{achievement.note}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </>
         )}
       </div>
@@ -444,6 +551,17 @@ export default function Members() {
                     >
                       <Linkedin className="w-3.5 h-3.5" />
                       LinkedIn
+                    </a>
+                  )}
+                  {selectedMember.credly && (
+                    <a
+                      href={selectedMember.credly}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-600 text-white hover:bg-amber-700 transition-colors text-xs"
+                    >
+                      <Award className="w-3.5 h-3.5" />
+                      Credly
                     </a>
                   )}
                   {selectedMember.email && (

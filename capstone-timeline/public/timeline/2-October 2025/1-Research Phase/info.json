@@ -1,8 +1,10 @@
 {
-  "title": "Research Phase",
+  "title": "CCNA Labs",
   "date": "October 2025",
-  "description": "Comprehensive market analysis and user research across Portugal and Europe. Conducted interviews and gathered insights from multiple stakeholders.",
+  "description": "Hands-on CCNA lab sessions focused on routing, switching, and troubleshooting.",
+  "albumFolder": "",
+  "albumFolders": [],
   "icon": "search",
-  "color": "bg-blue-500",
-  "category": "Research"
+  "color": "bg-cyan-500",
+  "category": "Labs"
 }

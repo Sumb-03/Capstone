@@ -11,6 +11,7 @@ export interface TeamMember {
   avatar?: string;
   skills: string[];
   linkedin?: string;
+  credly?: string;
   email?: string;
   hobbies?: string[];
   interests?: string[];
@@ -84,6 +85,7 @@ export async function GET() {
           avatar,
           skills: info.skills || [],
           linkedin: info.linkedin,
+          credly: info.credly,
           email: info.email,
           hobbies: info.hobbies,
           interests: info.interests,

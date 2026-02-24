@@ -306,13 +306,29 @@ export default function EuropeMap({ onPortugalClick }: EuropeMapProps) {
                 .europe-map-container svg [id*="Svalbard"] {
                   display: none !important;
                 }
-                .europe-map-container .map-hint,
-                .europe-map-container [class*="hint"],
-                .europe-map-container [class*="tooltip"] {
+                .europe-map-container [style*="position: fixed"] {
+                  position: absolute !important;
+                  top: 8px !important;
+                  left: 50% !important;
+                  transform: translateX(-50%) !important;
+                  margin: 0 !important;
+                  min-width: 120px;
+                  text-align: center;
+                  padding: 6px 12px !important;
+                  background: rgba(255, 255, 255, 0.06) !important;
+                  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                  color: #e2e8f0 !important;
+                  border-radius: 0.5rem !important;
+                  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35) !important;
+                  backdrop-filter: blur(8px) !important;
+                  -webkit-backdrop-filter: blur(8px) !important;
+                  font-size: 0.875rem !important;
+                  font-weight: 500 !important;
                   z-index: 100 !important;
                   pointer-events: none !important;
                 }
               `}</style>
+
               <Europe
                 type="select-single"
                 size={mapSize}

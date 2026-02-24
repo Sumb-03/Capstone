@@ -8,6 +8,14 @@ export interface TimelineEvent {
   date: string;
   description: string;
   image?: string;
+  images?: string[];
+  albumFolder?: string;
+  albumFolders?: string[];
+  linkedAlbums?: {
+    folder: string;
+    title: string;
+    images: string[];
+  }[];
   icon?: string;
   color?: string;
   category?: string;
@@ -19,6 +27,49 @@ const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.he
 function isImageFile(filename: string): boolean {
   const ext = path.extname(filename).toLowerCase();
   return IMAGE_EXTENSIONS.includes(ext);
+}
+
+function extractNumber(filename: string): number {
+  const match = filename.match(/(\d+)/);
+  return match ? parseInt(match[1], 10) : Infinity;
+}
+
+function sanitizeFolderName(folder: string): string {
+  return folder.replace(/[^a-zA-Z0-9-_ ]/g, '').trim();
+}
+
+function toDisplayTitle(folder: string): string {
+  return folder.replace(/[-_]+/g, ' ').trim();
+}
+
+function getAlbumImages(albumFolder: string): string[] {
+  const albumPath = path.join(process.cwd(), 'public', 'albums', albumFolder);
+  if (!fs.existsSync(albumPath)) {
+    return [];
+  }
+
+  const albumFiles = fs.readdirSync(albumPath);
+  return albumFiles
+    .filter((file) => isImageFile(file))
+    .sort((a, b) => extractNumber(a) - extractNumber(b))
+    .map((file) => toPublicUrl('albums', albumFolder, file));
+}
+
+function getAllAlbumFolders(): string[] {
+  const albumsRoot = path.join(process.cwd(), 'public', 'albums');
+  if (!fs.existsSync(albumsRoot)) {
+    return [];
+  }
+
+  const entries = fs.readdirSync(albumsRoot, { withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('_') && !entry.name.startsWith('.'))
+    .map((entry) => entry.name)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+function toPublicUrl(...segments: string[]): string {
+  return `/${segments.map((segment) => encodeURIComponent(segment)).join('/')}`;
 }
 
 function extractOrder(name: string): number {
@@ -73,20 +124,77 @@ export async function GET() {
           const infoContent = fs.readFileSync(infoPath, 'utf-8');
           const info = JSON.parse(infoContent);
 
-          // Find an image file in the milestone folder
+          // Find images in the milestone folder
           const files = fs.readdirSync(milestonePath);
-          const imageFile = files.find(file => 
-            isImageFile(file) && file !== 'info.json'
+          const eventFolderImages = files
+            .filter((file) => isImageFile(file) && file !== 'info.json')
+            .sort((a, b) => extractNumber(a) - extractNumber(b))
+            .map((file) =>
+              toPublicUrl('timeline', monthFolder.name, milestoneFolder.name, file)
+            );
+
+          // Optional linked album folder (public/albums/<folder>)
+          const albumFolder = typeof info.albumFolder === 'string'
+            ? sanitizeFolderName(info.albumFolder)
+            : '';
+
+          const albumFoldersFromInfo = Array.isArray(info.albumFolders)
+            ? info.albumFolders
+                .filter((folder: unknown): folder is string => typeof folder === 'string')
+                .map((folder: string) => sanitizeFolderName(folder))
+                .filter((folder: string) => folder.length > 0)
+            : [];
+
+          const includeAllAlbums = info.includeAllAlbums === true;
+          const allAlbumFoldersFromDisk = includeAllAlbums ? getAllAlbumFolders() : [];
+
+          const allAlbumFolders = Array.from(
+            new Set([
+              ...allAlbumFoldersFromDisk,
+              ...albumFoldersFromInfo,
+              ...(albumFolder ? [albumFolder] : []),
+            ])
           );
+
+          const linkedAlbums = allAlbumFolders
+            .map((folder) => {
+              const images = getAlbumImages(folder);
+              if (images.length === 0) {
+                return null;
+              }
+
+              return {
+                folder,
+                title: toDisplayTitle(folder),
+                images,
+              };
+            })
+            .filter((album): album is { folder: string; title: string; images: string[] } => album !== null);
+
+          const albumImages = linkedAlbums.flatMap((album) => album.images);
+
+          // Optional custom images in info.json
+          const jsonImages = Array.isArray(info.images)
+            ? info.images.filter((img: unknown): img is string => typeof img === 'string' && img.length > 0)
+            : [];
+
+          const combinedImages = [...eventFolderImages, ...albumImages, ...jsonImages];
+          if (typeof info.image === 'string' && info.image.length > 0) {
+            combinedImages.push(info.image);
+          }
+
+          const uniqueImages = Array.from(new Set(combinedImages));
 
           const event: TimelineEvent = {
             id: generateId(monthFolder.name, milestoneFolder.name),
             title: info.title || milestoneFolder.name.replace(/^\d+-/, ''),
             date: info.date || monthFolder.name.replace(/^\d+-/, ''),
             description: info.description || '',
-            image: imageFile 
-              ? `/timeline/${encodeURIComponent(monthFolder.name)}/${encodeURIComponent(milestoneFolder.name)}/${encodeURIComponent(imageFile)}`
-              : info.image,
+            image: uniqueImages[0],
+            images: uniqueImages.length > 0 ? uniqueImages : undefined,
+            albumFolder: albumFolder || undefined,
+            albumFolders: allAlbumFolders.length > 0 ? allAlbumFolders : undefined,
+            linkedAlbums: linkedAlbums.length > 0 ? linkedAlbums : undefined,
             icon: info.icon,
             color: info.color,
             category: info.category,

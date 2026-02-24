@@ -1,8 +1,11 @@
 {
-  "title": "Development Sprint",
-  "date": "December 2025",
-  "description": "Full-stack development with cutting-edge technologies. Implemented core features using agile methodologies and continuous integration.",
-  "icon": "code",
-  "color": "bg-green-500",
-  "category": "Development"
+  "title": "Team Building and Other Events",
+  "date": "Entire Program",
+  "description": "Showcase of team building and community moments across the full capstone journey. Expand each linked album to explore event highlights.",
+  "includeAllAlbums": true,
+  "albumFolder": "",
+  "albumFolders": [],
+  "icon": "presentation",
+  "color": "bg-emerald-500",
+  "category": "Events"
 }
