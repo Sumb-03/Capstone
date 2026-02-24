@@ -16,6 +16,8 @@ import {
   ChevronRight,
   Keyboard,
   Maximize2,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -77,6 +79,8 @@ export default function Timeline({ events }: TimelineProps) {
   const [albumImageIndexes, setAlbumImageIndexes] = useState<Record<string, number>>({});
   const [showKeyboardHint, setShowKeyboardHint] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState<TimelineEventType | null>(null);
+  const [showEnding, setShowEnding] = useState(false);
+  const [endingStage, setEndingStage] = useState<'intro' | 'panel'>('intro');
   const containerRef = useRef<HTMLDivElement>(null);
 
   const getEventImages = useCallback((event?: TimelineEventType | null): string[] => {
@@ -127,7 +131,7 @@ export default function Timeline({ events }: TimelineProps) {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedEvent) return; // Don't navigate when dialog is open
+      if (selectedEvent || showEnding) return; // Don't navigate when dialog/ending is open
       
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         e.preventDefault();
@@ -149,7 +153,29 @@ export default function Timeline({ events }: TimelineProps) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNext, goToPrev, goToIndex, events, currentIndex, selectedEvent]);
+  }, [goToNext, goToPrev, goToIndex, events, currentIndex, selectedEvent, showEnding]);
+
+  useEffect(() => {
+    if (!showEnding) return;
+
+    setEndingStage('intro');
+    const stageTimer = window.setTimeout(() => {
+      setEndingStage('panel');
+    }, 2600);
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setShowEnding(false);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.clearTimeout(stageTimer);
+    };
+  }, [showEnding]);
 
   // Hide keyboard hint after 5 seconds
   useEffect(() => {
@@ -221,6 +247,10 @@ export default function Timeline({ events }: TimelineProps) {
 
     return (currentMonthIndex + withinMonthProgress) / monthTrack.length;
   }, [monthTrack, currentMonthIndex, currentIndex]);
+  const isTimelineComplete = useMemo(() => {
+    if (events.length === 0) return false;
+    return currentIndex === events.length - 1 || monthProgressRatio >= 1;
+  }, [currentIndex, events.length, monthProgressRatio]);
   const selectedLinkedAlbums = useMemo(
     () => selectedEvent?.linkedAlbums || [],
     [selectedEvent?.linkedAlbums]
@@ -380,6 +410,27 @@ export default function Timeline({ events }: TimelineProps) {
             transition={{ duration: 0.5, ease: 'easeOut' }}
           />
         </div>
+
+        <AnimatePresence>
+          {isTimelineComplete && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mt-4 flex justify-center"
+            >
+              <Button
+                type="button"
+                onClick={() => setShowEnding(true)}
+                className="rounded-full px-5 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base font-semibold bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-500 text-white border border-cyan-200/30 hover:brightness-110 shadow-[0_10px_30px_-8px_rgba(56,189,248,0.45)]"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Enter Ending
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Horizontal timeline track with dots - hidden on mobile */}
@@ -637,6 +688,146 @@ export default function Timeline({ events }: TimelineProps) {
           />
         ))}
       </div>
+
+      <AnimatePresence>
+        {showEnding && (
+          <motion.div
+            className="fixed inset-0 z-[120] overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.45 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-black" />
+
+            <motion.div
+              className="absolute -top-16 -left-12 w-80 h-80 rounded-full bg-cyan-500/20 blur-3xl"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.28, 0.15] }}
+              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.div
+              className="absolute -bottom-24 -right-10 w-96 h-96 rounded-full bg-emerald-500/20 blur-3xl"
+              animate={{ scale: [1, 1.18, 1], opacity: [0.12, 0.24, 0.12] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            />
+
+            <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8">
+              <AnimatePresence mode="wait">
+                {endingStage === 'intro' ? (
+                  <motion.div
+                    key="ending-intro"
+                    initial={{ opacity: 0, scale: 0.96, y: 14 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 1.04, y: -10 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    className="text-center"
+                  >
+                    <motion.p
+                      className="text-cyan-200/85 text-xs sm:text-sm tracking-[0.26em] uppercase"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15, duration: 0.5 }}
+                    >
+                      Final Chapter
+                    </motion.p>
+                    <motion.h3
+                      className="mt-4 text-white text-3xl sm:text-5xl md:text-6xl font-bold leading-tight"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.35, duration: 0.7 }}
+                    >
+                      The Future Starts Now
+                    </motion.h3>
+                    <motion.p
+                      className="mt-6 text-blue-100/85 text-sm sm:text-lg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.1, duration: 0.6 }}
+                    >
+                      Transitioning to what comes next...
+                    </motion.p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="ending-panel"
+                    initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 16, scale: 0.98 }}
+                    transition={{ duration: 0.55, ease: 'easeOut' }}
+                    className="w-full max-w-5xl px-4 sm:px-8 text-center"
+                  >
+                    <motion.p
+                      className="text-cyan-200/90 text-xs sm:text-sm tracking-[0.22em] uppercase"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      The Journey Continues
+                    </motion.p>
+
+                    <motion.h3
+                      className="mt-4 text-white text-3xl sm:text-5xl md:text-6xl font-bold leading-tight"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Beyond 2026, we keep building the future at Cisco.
+                    </motion.h3>
+
+                    <motion.p
+                      className="mt-7 text-blue-100/90 text-base sm:text-xl max-w-3xl mx-auto"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.45 }}
+                    >
+                      From networking to automation, security, and AI — this is only chapter one.
+                    </motion.p>
+
+                    <motion.div
+                      className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
+                    >
+                      <div className="rounded-full border border-cyan-200/30 bg-cyan-400/10 px-4 py-2 text-cyan-100 text-sm sm:text-base">Scale impact across teams</div>
+                      <div className="rounded-full border border-cyan-200/30 bg-cyan-400/10 px-4 py-2 text-cyan-100 text-sm sm:text-base">Lead with innovation</div>
+                      <div className="rounded-full border border-cyan-200/30 bg-cyan-400/10 px-4 py-2 text-cyan-100 text-sm sm:text-base">Turn vision into outcomes</div>
+                    </motion.div>
+
+                    <motion.div
+                      className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.75 }}
+                    >
+                      <Button
+                        type="button"
+                        onClick={() => setShowEnding(false)}
+                        className="rounded-full px-7 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white border border-cyan-200/25"
+                      >
+                        Back to Timeline
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setShowEnding(false);
+                          goToIndex(0);
+                        }}
+                        className="rounded-full px-7 py-2.5 bg-white/10 border-white/25 text-white hover:bg-white/20"
+                      >
+                        Replay Journey
+                      </Button>
+                    </motion.div>
+
+                    <p className="mt-4 text-white/60 text-xs">Press Esc to close</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Expanded Event Dialog */}
       <Dialog open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
