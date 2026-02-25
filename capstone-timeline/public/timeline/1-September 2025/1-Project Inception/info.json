@@ -1,9 +1,9 @@
 {
   "title": "First Week Onboarding",
   "date": "September 2025",
-  "description": "Kickoff and onboarding activities for the full cohort. Introduction to goals, workflows, tools, and learning roadmap.",
+  "description": "We spent the first week on the My Onboarding Journey, where we made a deep dive on Cisco's ins and outs, such as the company's culture, guidelines and general tools and platforms of which all employees depend on. Furthermore we participated in activities meant to learn Cisco's history and its technologies. Since this event happened in all EMEA, we had the opportunity to meet Cisco employees from all over the world.",
   "albumFolder": "",
-  "albumFolders": [],
+  "albumFolders": ["public\\albums\\1st Day at the Office", "public\\albums\\Onboarding Week"],
   "icon": "rocket",
   "color": "bg-blue-500",
   "category": "Learning"

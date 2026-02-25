@@ -35,7 +35,16 @@ function extractNumber(filename: string): number {
 }
 
 function sanitizeFolderName(folder: string): string {
-  return folder.replace(/[^a-zA-Z0-9-_ ]/g, '').trim();
+  const normalized = folder
+    .replace(/\\/g, '/')
+    .replace(/^\/?public\/?albums\//i, '')
+    .replace(/^\/?albums\//i, '')
+    .trim();
+
+  const segments = normalized.split('/').filter((segment) => segment.trim().length > 0);
+  const folderName = segments.length > 0 ? segments[segments.length - 1] : '';
+
+  return folderName.replace(/[^a-zA-Z0-9-_ ]/g, '').trim();
 }
 
 function toDisplayTitle(folder: string): string {

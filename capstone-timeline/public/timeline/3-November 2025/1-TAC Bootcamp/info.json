@@ -1,0 +1,10 @@
+{
+  "title": "TAC Bootcamp",
+  "date": "November 2025",
+  "description": "Participated in a week-long TAC Bootcamp led by TAC engineers, focusing on hands-on training with key TAC tools. \n-Gained practical experience and readiness for future casework through intensive tool learning sessions. \n-Took part in a fun, one-day Escape Room challenge to apply skills and test teamwork by solving practical scenarios using TAC tools.",
+  "albumFolder": "",
+  "albumFolders": ["capstone-timeline\\public\\albums\\Treasure Hunt"],
+  "icon": "code",
+  "color": "bg-indigo-500",
+  "category": "Bootcamp"
+}
