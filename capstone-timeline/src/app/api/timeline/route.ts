@@ -9,6 +9,7 @@ export interface TimelineEvent {
   description: string;
   image?: string;
   images?: string[];
+  includeEventFolderImages?: boolean;
   albumFolder?: string;
   albumFolders?: string[];
   linkedAlbums?: {
@@ -132,15 +133,18 @@ export async function GET() {
           // Read and parse info.json
           const infoContent = fs.readFileSync(infoPath, 'utf-8');
           const info = JSON.parse(infoContent);
+          const includeEventFolderImages = info.includeEventFolderImages === true;
 
           // Find images in the milestone folder
-          const files = fs.readdirSync(milestonePath);
-          const eventFolderImages = files
-            .filter((file) => isImageFile(file) && file !== 'info.json')
-            .sort((a, b) => extractNumber(a) - extractNumber(b))
-            .map((file) =>
-              toPublicUrl('timeline', monthFolder.name, milestoneFolder.name, file)
-            );
+          const eventFolderImages = includeEventFolderImages
+            ? fs
+                .readdirSync(milestonePath)
+                .filter((file) => isImageFile(file) && file !== 'info.json')
+                .sort((a, b) => extractNumber(a) - extractNumber(b))
+                .map((file) =>
+                  toPublicUrl('timeline', monthFolder.name, milestoneFolder.name, file)
+                )
+            : [];
 
           // Optional linked album folder (public/albums/<folder>)
           const albumFolder = typeof info.albumFolder === 'string'
@@ -201,6 +205,7 @@ export async function GET() {
             description: info.description || '',
             image: uniqueImages[0],
             images: uniqueImages.length > 0 ? uniqueImages : undefined,
+            includeEventFolderImages,
             albumFolder: albumFolder || undefined,
             albumFolders: allAlbumFolders.length > 0 ? allAlbumFolders : undefined,
             linkedAlbums: linkedAlbums.length > 0 ? linkedAlbums : undefined,

@@ -11,6 +11,7 @@ export interface TimelineEvent {
   description: string;
   image?: string;
   images?: string[];  // Multiple images for carousel
+  includeEventFolderImages?: boolean; // Whether to scan this event folder for images
   imageFolder?: string;  // Folder name in public/images/timeline/
   albumFolder?: string; // Optional folder name in public/albums/
   albumFolders?: string[]; // Optional multiple album folders for showcase events

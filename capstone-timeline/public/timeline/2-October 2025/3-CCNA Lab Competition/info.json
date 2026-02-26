@@ -2,6 +2,7 @@
   "title": "CCNA Lab Competition",
   "date": "October 2025",
   "description": "The lab competition was a week-long activity where we work in teams to implement challenging network topologies under tight deadlines, simulating real-world technical support situations.",
+  "includeEventFolderImages": false,
   "albumFolder": "Lab Competition Celebration",
   "albumFolders": [],
   "icon": "check-circle",

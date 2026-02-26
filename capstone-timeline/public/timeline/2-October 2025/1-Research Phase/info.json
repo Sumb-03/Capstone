@@ -2,6 +2,7 @@
   "title": "CCNA Labs",
   "date": "October 2025",
   "description": "Hands-on CCNA lab sessions focused on routing, switching, and troubleshooting.",
+  "includeEventFolderImages": false,
   "albumFolder": "",
   "albumFolders": [],
   "icon": "search",

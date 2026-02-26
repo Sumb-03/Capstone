@@ -2,6 +2,7 @@
   "title": "CCNA/DevNet Exams",
   "date": "November 2025",
   "description": "Certification exam window",
+  "includeEventFolderImages": true,
   "albumFolder": "",
   "albumFolders": [],
   "icon": "check-circle",
