@@ -14,7 +14,7 @@ import { ArrowLeft, Clock, Users, Image as ImageIcon, Globe } from 'lucide-react
 
 type ViewState = 'europe' | 'portugal' | 'main';
 type TabState = 'timeline' | 'members' | 'albums';
-const INTRO_TITLE = 'In 2025, 7 Stars from across Portugal (and Greece/Brazil) joined Cisco together.';
+const INTRO_TITLE = 'In 2025, 7 Stars from across Portugal, Greece and Brazil joined Cisco together.';
 
 function getStateFromHash(): { view: ViewState; tab: TabState } {
   if (typeof window === 'undefined') return { view: 'europe', tab: 'timeline' };
