@@ -4,7 +4,7 @@
   "description": "At the start of December, each of us started transitioning to our future teams. We were assigned mentors and given new technologies to dive into. A month for studying the TC2E, and then the cherry picking process started, bringing us to now.",
   "includeEventFolderImages": false,
   "albumFolder": "",
-  "albumFolders": [],
+  "albumFolders": ["capstone-timeline\\public\\albums\\Team Connect DC SV","capstone-timeline\\public\\albums\\Team Connect AAA", "capstone-timeline\\public\\albums\\Team Connect PS"],
   "icon": "presentation",
   "color": "bg-blue-500",
   "category": "Transition"

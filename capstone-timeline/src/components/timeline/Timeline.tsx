@@ -92,19 +92,16 @@ export default function Timeline({ events }: TimelineProps) {
   }, []);
 
   const parseEventDescription = useCallback((description: string) => {
-    const lines = description
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0);
+    const lines = description.split('\n');
 
     const bullets = lines
-      .filter((line) => /^[-•*]\s+/.test(line))
-      .map((line) => line.replace(/^[-•*]\s+/, ''));
+      .filter((line) => /^[-•*]\s+/.test(line.trimStart()))
+      .map((line) => line.trimStart().replace(/^[-•*]\s+/, ''));
 
-    const textLines = lines.filter((line) => !/^[-•*]\s+/.test(line));
+    const textLines = lines.filter((line) => !/^[-•*]\s+/.test(line.trimStart()));
 
     return {
-      text: textLines.join(' '),
+      text: textLines.join('\n').replace(/\n{3,}/g, '\n\n').trim(),
       bullets,
     };
   }, []);
@@ -161,7 +158,7 @@ export default function Timeline({ events }: TimelineProps) {
     setEndingStage('intro');
     const stageTimer = window.setTimeout(() => {
       setEndingStage('panel');
-    }, 2600);
+    }, 5200);
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -639,7 +636,7 @@ export default function Timeline({ events }: TimelineProps) {
                       transition={{ delay: 0.5 }}
                     >
                       {currentEventContent.text && (
-                        <p className="text-sm sm:text-base md:text-[1.02rem] text-blue-100/80 leading-relaxed">
+                        <p className="text-sm sm:text-base md:text-[1.02rem] text-blue-100/80 leading-relaxed whitespace-pre-line">
                           {currentEventContent.text}
                         </p>
                       )}
@@ -958,7 +955,7 @@ export default function Timeline({ events }: TimelineProps) {
                 {/* Full Description */}
                 <div className="prose prose-lg prose-invert max-w-none">
                   {selectedEventContent.text && (
-                    <p className="text-blue-100/80 leading-relaxed text-base sm:text-lg">
+                    <p className="text-blue-100/80 leading-relaxed text-base sm:text-lg whitespace-pre-line">
                       {selectedEventContent.text}
                     </p>
                   )}
